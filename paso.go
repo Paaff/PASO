@@ -20,6 +20,7 @@ func main() {
 
 func commandFlags() {
 	// TODO: Use viper to check the command flags and then choose which loadConfig should be ran.
+	server.Start()
 }
 
 // Loads a config
