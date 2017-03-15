@@ -1,4 +1,4 @@
-package main
+package example
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"github.com/streadway/amqp"
 )
 
-func main() {
+func SendStart() {
 
 	conn, err := amqp.Dial("amqp://hubrabbit:pasopass@192.168.0.109:5672/")
 	failOnError(err, "Failed to connect to RabbitMQ")

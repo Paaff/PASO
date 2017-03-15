@@ -1,26 +1,29 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 
+	"github.com/paaff/PASO/client"
 	"github.com/paaff/PASO/server"
 	"github.com/spf13/viper"
 )
 
 func main() {
-	fmt.Println("Hello World! Get ready for some Auto Presence Detection.")
-
 	// Check what instance should be launched.
-	commandFlags()
+	launchFlag := flag.String("launch", "client", "Flag that describes whether its a server or a client instance.")
+	flag.Parse()
+	//loadConfig(*launchFlag)
 
-	// Starting the server.
-	// TODO: Should this be started as a "go" function - Async
-	server.Start()
-}
+	if *launchFlag == "server" {
+		// Starting the server.
+		// TODO: Should this be started as a "go" function - Async
+		server.Start()
 
-func commandFlags() {
-	// TODO: Use viper to check the command flags and then choose which loadConfig should be ran.
-	server.Start()
+	} else {
+		client.Start()
+	}
+
 }
 
 // Loads a config
@@ -32,7 +35,5 @@ func loadConfig(version string) {
 	if err != nil {
 		panic(fmt.Errorf("Fatal error config file: %s", err))
 	}
-
-	// Config loaded properly - Do the correct stuff.
 
 }
