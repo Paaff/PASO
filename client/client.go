@@ -10,6 +10,7 @@ import (
 func Start() {
 	if runtime.GOOS == "linux" {
 		fmt.Println("Unix type OS detected")
+		detectBluetooth()
 	}
 }
 
