@@ -8,13 +8,13 @@ import (
 )
 
 // RecieveHello shit
-func main() {
+func recieveStart() {
 	conn, err := amqp.Dial("amqp://hubrabbit:pasopass@192.168.0.109:5672/")
-	failOnError(err, "Failed to connect to RabbitMQ")
+	failOnsError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
 
 	ch, err := conn.Channel()
-	failOnError(err, "Failed to open a channel")
+	failOnsError(err, "Failed to open a channel")
 	defer ch.Close()
 
 	q, err := ch.QueueDeclare(
@@ -25,7 +25,7 @@ func main() {
 		false,   // no-wait
 		nil,     // arguments
 	)
-	failOnError(err, "Failed to declare a queue")
+	failOnsError(err, "Failed to declare a queue")
 
 	msgs, err := ch.Consume(
 		q.Name, // queue
@@ -36,7 +36,7 @@ func main() {
 		false,  // no-wait
 		nil,    // args
 	)
-	failOnError(err, "Failed to register a consumer")
+	failOnsError(err, "Failed to register a consumer")
 
 	forever := make(chan bool)
 
@@ -50,7 +50,7 @@ func main() {
 	<-forever
 }
 
-func failOnError(err error, msg string) {
+func failOnsError(err error, msg string) {
 	if err != nil {
 		log.Fatalf("%s: %s", msg, err)
 		panic(fmt.Sprintf("%s: %s", msg, err))
