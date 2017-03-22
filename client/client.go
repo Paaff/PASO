@@ -20,7 +20,13 @@ func detectBluetooth() {
 	if err != nil {
 		fmt.Printf("%s", err)
 	}
-	fmt.Printf("%s", out)
+
+	trimOutput(out)
+
+}
+
+// Trimming the output of Bluetooth inq command
+func trimOutput(inq []byte) {
 
 }
 
@@ -33,7 +39,13 @@ func detectWifi() {
 	fmt.Printf("%s", out)
 }
 
-// JSON struct for detected data.
-type data struct {
-	idData string
+// Bluetooth data.
+type blueData struct {
+	bdaddress string
+	class     string
+}
+
+// Wifi data
+type wifiData struct {
+	mac string
 }
