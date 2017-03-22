@@ -3,30 +3,42 @@ package client
 import (
 	"fmt"
 	"os/exec"
-	"runtime"
+	"strings"
 )
 
 // Start - Global function to start the client.
 func Start() {
-	if runtime.GOOS == "linux" {
-		fmt.Println("Unix type OS detected")
-		detectBluetooth()
-	}
+	detectBluetooth()
+
 }
 
 // Bluetooth detection
 func detectBluetooth() {
+	exec.Command("hcitool", "scan")
 	out, err := exec.Command("hcitool", "inq").Output()
 	if err != nil {
 		fmt.Printf("%s", err)
 	}
 
-	trimOutput(out)
+	trimBtOutput(out)
 
 }
 
 // Trimming the output of Bluetooth inq command
-func trimOutput(inq []byte) {
+func trimBtOutput(inq []byte) {
+	var result []blueData
+	// split string up for each
+	bluetoothList := strings.Split(string(inq), "\n")
+	for i, line := range bluetoothList {
+		// Disregard first line of hcitool inq as it just returns "Inquring ..."
+		// And the last line, as it is empty
+		if i > 0 && i != len(bluetoothList) {
+			bluetoothLine := strings.Fields(line)
+			blueData{
+				bdaddress: bluetoothLine[0],
+				class:     bluetoothLine[5]}
+		}
+	}
 
 }
 
