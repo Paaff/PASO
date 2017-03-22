@@ -1,10 +1,8 @@
 package server
 
-import "fmt"
-
 // Start - Global function to start the server.
 func Start() {
-	fmt.Println("Shit son")
+
 }
 
 type sensorData struct {
