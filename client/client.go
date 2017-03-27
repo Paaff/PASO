@@ -7,10 +7,13 @@ import (
 	"strings"
 )
 
+// Collection of found phones
+var detectedPhones []blueData
+
 // Start - Global function to start the client.
 func Start() {
 	detectBluetooth()
-
+	fmt.Println(detectedPhones)
 }
 
 // Bluetooth detection
@@ -21,28 +24,28 @@ func detectBluetooth() {
 		fmt.Printf("%s", err)
 	}
 
-	trimBtOutput(out)
+	findAndDiscoverBClass(out)
 
 }
 
 // Trimming the output of Bluetooth inq command
-func trimBtOutput(inq []byte) {
-	//var result []blueData
+func findAndDiscoverBClass(inq []byte) {
 	// split string up for each
 	bluetoothList := strings.Split(string(inq), "\n")
 	for i, line := range bluetoothList {
+
 		// Disregard first line of hcitool inq as it just returns "Inquring ..."
 		// And the last line, as it is empty
 		if i > 0 && i != len(bluetoothList)-1 {
 			bluetoothLine := strings.Fields(line)
-			// for i := range bluetoothLine {
-			// 	fmt.Printf("Index: %v and value: %v\n", i, bluetoothLine[i])
-			// }
-			// 	blueData{
-			// 		bdaddress: bluetoothLine[0],
-			// 		class:     bluetoothLine[5]}
-			fmt.Printf("The bluetooth address %v, and the class is %v\n", bluetoothLine[0], bluetoothLine[5])
-			discoverBtClass(bluetoothLine[5])
+
+			// Check that we have the correct class (Phone)
+			if checkBtClass(bluetoothLine[5]) {
+				phone := blueData{bdaddress: bluetoothLine[0], class: bluetoothLine[5]}
+				fmt.Printf("The bluetooth address %v, and the class is %v\n", bluetoothLine[0], bluetoothLine[5])
+				detectedPhones = append(detectedPhones, phone)
+			}
+
 		}
 
 	}
@@ -50,7 +53,7 @@ func trimBtOutput(inq []byte) {
 }
 
 // Takes a hexadecimal number and interprets the binary representation as what class is embedded there.
-func discoverBtClass(hexClass string) bool {
+func checkBtClass(hexClass string) bool {
 	// Strip the identifier 0x
 	rawHex := hexClass[2:]
 
@@ -59,27 +62,19 @@ func discoverBtClass(hexClass string) bool {
 	if err != nil {
 		fmt.Printf("%s", err)
 	}
-
-	// Convert int to binary representation
-	// %024b indicates base 2, padding with 0, with 24 characters.
-	//classBin := fmt.Sprintf("%024b", classInt)
-
 	// Find out if the binary representation matches that of a phone.
 	/*
 		Bit 22 = Telephony
 		Bit 12-11-10-9-8 = 00010 = Phone
 		Bit 7-6-5-4-3-2 = 000011 = Smart Phone
 	*/
-	checkBitN(classInt, 22)
-	return false
+
+	return checkBitN(classInt, 22)
 }
 
 // TODO: 64 and 32 bit, will this clash?
-func checkBitN(val uint64, n uint32) int {
-	if 1<<n&val > 0 {
-		return 1
-	}
-	return 0
+func checkBitN(val uint64, n uint32) bool {
+	return 1<<n&val > 0
 }
 
 // Wifi detection
