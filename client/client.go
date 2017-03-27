@@ -27,18 +27,24 @@ func detectBluetooth() {
 
 // Trimming the output of Bluetooth inq command
 func trimBtOutput(inq []byte) {
-	var result []blueData
+	//var result []blueData
 	// split string up for each
 	bluetoothList := strings.Split(string(inq), "\n")
 	for i, line := range bluetoothList {
 		// Disregard first line of hcitool inq as it just returns "Inquring ..."
 		// And the last line, as it is empty
-		if i > 0 && i != len(bluetoothList) {
+		if i > 0 && i != len(bluetoothList)-1 {
 			bluetoothLine := strings.Fields(line)
-			blueData{
-				bdaddress: bluetoothLine[0],
-				class:     bluetoothLine[5]}
+			// for i := range bluetoothLine {
+			// 	fmt.Printf("Index: %v and value: %v\n", i, bluetoothLine[i])
+			// }
+			// 	blueData{
+			// 		bdaddress: bluetoothLine[0],
+			// 		class:     bluetoothLine[5]}
+			fmt.Printf("The bluetooth address %v, and the class is %v\n", bluetoothLine[0], bluetoothLine[5])
+			discoverBtClass(bluetoothLine[5])
 		}
+
 	}
 
 }
@@ -56,7 +62,7 @@ func discoverBtClass(hexClass string) bool {
 
 	// Convert int to binary representation
 	// %024b indicates base 2, padding with 0, with 24 characters.
-	classBin := fmt.Sprintf("%024b", classInt)
+	//classBin := fmt.Sprintf("%024b", classInt)
 
 	// Find out if the binary representation matches that of a phone.
 	/*
@@ -64,8 +70,16 @@ func discoverBtClass(hexClass string) bool {
 		Bit 12-11-10-9-8 = 00010 = Phone
 		Bit 7-6-5-4-3-2 = 000011 = Smart Phone
 	*/
-
+	checkBitN(classInt, 22)
 	return false
+}
+
+// TODO: 64 and 32 bit, will this clash?
+func checkBitN(val uint64, n uint32) int {
+	if 1<<n&val > 0 {
+		return 1
+	}
+	return 0
 }
 
 // Wifi detection
