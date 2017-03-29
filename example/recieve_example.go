@@ -19,7 +19,7 @@ func recieveStart() {
 
 	q, err := ch.QueueDeclare(
 		"hello", // name
-		false,   // durable
+		true,    // durable
 		false,   // delete when usused
 		false,   // exclusive
 		false,   // no-wait
