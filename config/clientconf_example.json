@@ -1,0 +1,15 @@
+{
+  "RabbitMQ": {
+      "Username": "USERNAME",
+      "Password": "PASSWORD",
+
+      "Host": {
+        "Address": "ADDRESS",
+        "Port": "PORT"
+      },
+      
+      "Exchange name": "EXCHANGE_NAME",
+      "Exchange type": "EXCHANGE_TYPE",
+      "Routing Key": "ROUTING_KEY"
+  }
+}

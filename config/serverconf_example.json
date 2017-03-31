@@ -1,0 +1,20 @@
+{
+  "RabbitMQ": {
+      "Username": "USERNAME",
+      "Password": "PASSWORD",
+
+      "Host": {
+        "Local Address": "ADDRESS",
+        "Local Port": "PORT"
+      },
+
+      "Exchange name": "EXCHANGE_NAME",
+      "Exchange type": "EXCHANGE_TYPE",
+      "Queue name": "QUEUE_NAME"
+  },
+  "Policy": {
+    "Name": "Boss",
+    "Id": ""
+
+  }
+}

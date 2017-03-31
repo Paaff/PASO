@@ -2,10 +2,8 @@ package main
 
 import (
 	"flag"
-	"fmt"
 
 	"github.com/paaff/PASO/client"
-	"github.com/spf13/viper"
 )
 
 func main() {
@@ -25,17 +23,5 @@ func main() {
 	// 		client.Start()
 	// 	}
 	// }
-
-}
-
-// Loads a config
-func loadConfig(version string) {
-	viper.SetConfigName(version)
-	viper.SetConfigType("json")
-	viper.AddConfigPath("./config")
-	err := viper.ReadInConfig()
-	if err != nil {
-		panic(fmt.Errorf("Fatal error config file: %s", err))
-	}
 
 }
