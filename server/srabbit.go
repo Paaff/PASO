@@ -30,12 +30,12 @@ func InitSRabbit() <-chan amqp.Delivery {
 	failOnError(err, "Failed to declare an exchange")
 
 	q, err := ch.QueueDeclare(
-		"",    // name
-		false, // durable
-		false, // delete when usused
-		true,  // exclusive
-		false, // no-wait
-		nil,   // arguments
+		"queuename", // name
+		false,       // durable
+		false,       // delete when usused
+		true,        // exclusive
+		false,       // no-wait
+		nil,         // arguments
 	)
 	failOnError(err, "Failed to declare a queue")
 

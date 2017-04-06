@@ -1,20 +1,9 @@
 {
-  "RabbitMQ": {
-      "Username": "USERNAME",
-      "Password": "PASSWORD",
-
-      "Host": {
-        "Local Address": "ADDRESS",
-        "Local Port": "PORT"
-      },
-
-      "Exchange name": "EXCHANGE_NAME",
-      "Exchange type": "EXCHANGE_TYPE",
-      "Queue name": "QUEUE_NAME"
-  },
-  "Policy": {
-    "Name": "Boss",
-    "Id": ""
-
-  }
+  "username": "USERNAME",
+  "password": "PASSWORD",
+  "address": "ADDRESS",
+  "port": "PORT",
+  "exchangeName": "EXCHANGE_NAME",
+  "exchangeType": "EXCHANGE_TYPE",
+  "routingKey": "ROUTING_KEY"
 }

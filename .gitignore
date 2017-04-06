@@ -1,3 +1,8 @@
+# Dont track client and server config files
+serverconf.json
+clientconf.json
+policyconf.json
+
 *.swp
 # Created by https://www.gitignore.io/api/go
 

@@ -1,19 +1,34 @@
 package config
 
 import (
-	"fmt"
-
-	"github.com/spf13/viper"
+	"encoding/json"
+	"log"
+	"os"
 )
 
-// Loads a config
-func loadConfig(version string) {
-	viper.SetConfigName(version)
-	viper.SetConfigType("json")
-	viper.AddConfigPath("./config")
-	err := viper.ReadInConfig()
-	if err != nil {
-		panic(fmt.Errorf("Fatal error config file: %s", err))
+type config struct {
+	Username     string `json:"username"`
+	Pass         string `json:"password"`
+	Address      string `json:"address"`
+	Port         string `json:"port"`
+	ExchangeName string `json:"exchangeName"`
+	ExchangeType string `json:"exchangeType"`
+	RoutingKey   string `json:"routingKey"`
+}
+
+func loadConfig(confName string) *config {
+	var conf config
+	config, osErr := os.Open(confName)
+	if osErr != nil {
+		log.Fatal(osErr)
 	}
 
+	decoder := json.NewDecoder(config)
+	if err := decoder.Decode(&conf); err != nil {
+		log.Fatal(err)
+	}
+	return &conf
+
 }
+
+// Methods for config struct
