@@ -7,7 +7,6 @@ import (
 	"runtime"
 
 	"github.com/paaff/PASO/client"
-	"github.com/paaff/PASO/config"
 	"github.com/paaff/PASO/server"
 )
 
@@ -21,16 +20,18 @@ func main() {
 		if *launchFlag == "server" {
 			// TODO: Should this be started as a "go" function - Async
 			// Why should it be that?
-			c := config.LoadConfig(*launchFlag)
+			//c := config.LoadConfig(*launchFlag)
 			server.Start()
 
 		} else if *launchFlag == "client" {
-			c := config.LoadConfig(*launchFlag)
+			//c := config.LoadConfig(*launchFlag)
 			client.Start()
 
 		} else {
 			log.Fatal("Launch Flag is either 'server' or 'client'")
 		}
+	} else {
+		log.Fatal("This is not a linux system, which is intended for this project at the moment.")
 	}
 
 }

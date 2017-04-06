@@ -1,4 +1,5 @@
 {
+  "type": "SERVER",
   "username": "USERNAME",
   "password": "PASSWORD",
   "address": "ADDRESS",

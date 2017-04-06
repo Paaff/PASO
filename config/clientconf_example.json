@@ -1,9 +1,10 @@
 {
+  "type": "CLIENT",
   "username": "USERNAME",
   "password": "PASSWORD",
   "address": "ADDRESS",
   "port": "PORT",
   "exchangeName": "EXCHANGE_NAME",
   "exchangeType": "EXCHANGE_TYPE",
-  "routingKey": "ROUTING_KEY"  
+  "routingKey": "ROUTING_KEY"
 }

@@ -1,16 +1,11 @@
 package config
 
-import (
-	"log"
-	"testing"
-)
+import "testing"
 
 func TestClientConfigLoadedIntoStruct(t *testing.T) {
-	path := "./clientconf_example.json"
-	c, err := LoadConfig(path)
-	if err != nil {
-		log.Fatal(err)
-	}
+	path := "C:\\Users\\Pete\\Documents\\Programming Projects\\GoLang\\src\\github.com\\paaff\\PASO\\config\\clientconf_example.json"
+	c := LoadConfig(path)
+
 	if c.Type != "CLIENT" {
 		t.Errorf("Not correct type: %v", c.Type)
 	}
@@ -46,11 +41,8 @@ func TestClientConfigLoadedIntoStruct(t *testing.T) {
 }
 
 func TestServerConfigLoadedIntoStruct(t *testing.T) {
-	path := "./serverconf_example.json"
-	c, err := LoadConfig(path)
-	if err != nil {
-		log.Fatal(err)
-	}
+	path := "C:\\Users\\Pete\\Documents\\Programming Projects\\GoLang\\src\\github.com\\paaff\\PASO\\config\\serverconf_example.json"
+	c := LoadConfig(path)
 
 	if c.Type != "SERVER" {
 		t.Errorf("Not correct type: %v", c.Type)
