@@ -5,12 +5,14 @@ import (
 	"log"
 	"os"
 
+	"github.com/paaff/PASO/config"
 	"github.com/streadway/amqp"
 )
 
 // InitSRabbit is a function to be called by the servers main function enabling a connection to be made to the RabbitMQ server.
-func InitSRabbit() <-chan amqp.Delivery {
-	conn, err := amqp.Dial("amqp://hubrabbit:pasopass@192.168.0.109:5672/")
+func InitSRabbit(conf *config.Config) <-chan amqp.Delivery {
+	dialPath := fmt.Sprintf("amqp://%s:%s@%s:%s/", conf.Username, conf.Pass, conf.Address, conf.Port)
+	conn, err := amqp.Dial(dialPath)
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
 
@@ -19,13 +21,13 @@ func InitSRabbit() <-chan amqp.Delivery {
 	defer ch.Close()
 
 	err = ch.ExchangeDeclare(
-		"logs_topic", // name
-		"topic",      // type
-		true,         // durable
-		false,        // auto-deleted
-		false,        // internal
-		false,        // no-wait
-		nil,          // arguments
+		conf.ExchangeName, // name
+		conf.ExchangeType, // type
+		true,              // durable
+		false,             // auto-deleted
+		false,             // internal
+		false,             // no-wait
+		nil,               // arguments
 	)
 	failOnError(err, "Failed to declare an exchange")
 

@@ -5,13 +5,15 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+
+	"github.com/paaff/PASO/config"
 )
 
 // Collection of found phones
 var detectedPhones []blueData
 
 // Start - Global function to start the client.
-func Start() {
+func Start(conf *config.Config) {
 	detectBluetooth()
 	fmt.Println(detectedPhones)
 }
