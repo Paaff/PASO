@@ -3,7 +3,7 @@ package config
 import "testing"
 
 func TestClientConfigLoadedIntoStruct(t *testing.T) {
-	c := loadConfig("./clientconf_example.json")
+	c := LoadConfig("./clientconf_example.json")
 
 	if c.Username != "USERNAME" {
 		t.Errorf("Not correct username: %v", c.Username)
@@ -36,7 +36,7 @@ func TestClientConfigLoadedIntoStruct(t *testing.T) {
 }
 
 func TestServerConfigLoadedIntoStruct(t *testing.T) {
-	c := loadConfig("./serverconf_example.json")
+	c := LoadConfig("./serverconf_example.json")
 
 	if c.Username != "USERNAME" {
 		t.Errorf("Not correct username: %v", c.Username)
