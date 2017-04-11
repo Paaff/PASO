@@ -80,7 +80,7 @@ func detectWifi() {
 	fmt.Printf("%s", out)
 }
 
-// Bluetooth data.
+// blueData - Bluetooth data.
 type blueData struct {
 	bdaddress string
 	class     string
