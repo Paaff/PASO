@@ -9,8 +9,7 @@ import (
 // Start - Global function to start the server.
 func Start(conf *config.Config) {
 	// Start connection with RabitMQ server.
-	// TODO: Input config values.
-	msgs := InitSRabbit(conf)
+	msgs := InitWorker(conf)
 
 	// Make the server run forever with an unbuffered channel.
 	forever := make(chan bool)
@@ -22,7 +21,7 @@ func Start(conf *config.Config) {
 		}
 	}()
 
-	log.Printf(" [*] Waiting for logs. To exit press CTRL+C")
+	log.Printf("Server is running. Press CTRL+C to exit.")
 	<-forever
 }
 
