@@ -21,6 +21,7 @@ func Start(conf *config.Config) {
 
 	// Start detection of bluetooth data
 	dataChannel := make(chan blueData)
+	go detectBluetooth(dataChannel)
 	for data := range dataChannel {
 		publish(data, r, conf)
 	}
