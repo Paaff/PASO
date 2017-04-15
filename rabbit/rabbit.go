@@ -44,3 +44,5 @@ func NewRabbit(dialPath string, exchangeName string, exchangeType string) (*Rabb
 	return &r, nil
 
 }
+
+func dialPath()

@@ -9,7 +9,7 @@ import (
 // Start - Global function to start the server.
 func Start(conf *config.Config) {
 	// Start connection with RabitMQ server.
-	msgs := InitWorker(conf)
+	msgs := initWorker(conf)
 
 	// Make the server run forever with an unbuffered channel.
 	forever := make(chan bool)
