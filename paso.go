@@ -19,7 +19,7 @@ func main() {
 	launchFlag := flag.String("launch", "client", "Flag that describes whether its a server or a client instance.")
 	flag.Parse()
 
-	if runtime.GOOS == "linux" {
+	if isUnix(runtime.GOOS) {
 		fmt.Println("Unix type OS detected")
 		if *launchFlag == "server" {
 			// TODO: Should this be started as a "go" function - Async
@@ -44,4 +44,12 @@ func main() {
 		log.Fatal("This is not a linux system, which is intended for this project at the moment.")
 	}
 
+}
+
+func initLaunchFlags() {
+
+}
+
+func isUnix(runtimeOS string) bool {
+	return runtimeOS == "linux"
 }

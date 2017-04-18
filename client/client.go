@@ -2,7 +2,6 @@ package client
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 
 	"github.com/paaff/PASO/config"
@@ -13,8 +12,7 @@ import (
 // Start - Global function to start the client.
 func Start(conf *config.Config) {
 	// Initialize rabbit connection and get ready to publish.
-	dialPath := fmt.Sprintf("amqp://%s:%s@%s:%s/", conf.Username, conf.Pass, conf.Address, conf.Port)
-	r, err := rabbit.NewRabbit(dialPath, conf.ExchangeName, conf.ExchangeType)
+	r, err := rabbit.NewRabbit(conf.Username, conf.Pass, conf.Address, conf.Port, conf.ExchangeName, conf.ExchangeType)
 	if err != nil {
 		log.Fatal(err)
 	}

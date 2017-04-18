@@ -1,6 +1,7 @@
 package rabbit
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/streadway/amqp"
@@ -13,7 +14,8 @@ type Rabbit struct {
 }
 
 // NewRabbit - Initialization function for a Rabbit struct
-func NewRabbit(dialPath string, exchangeName string, exchangeType string) (*Rabbit, error) {
+func NewRabbit(username string, pass string, address string, port string, exchangeName string, exchangeType string) (*Rabbit, error) {
+	dialPath := createDialPath(username, pass, address, port)
 	conn, err := amqp.Dial(dialPath)
 	if err != nil {
 		log.Fatal("Failed to connect to RabbitMQ")
@@ -45,4 +47,6 @@ func NewRabbit(dialPath string, exchangeName string, exchangeType string) (*Rabb
 
 }
 
-func dialPath()
+func createDialPath(username string, pass string, address string, port string) string {
+	return fmt.Sprintf("amqp://%s:%s@%s:%s/", username, pass, address, port)
+}
