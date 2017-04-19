@@ -12,10 +12,7 @@ import (
 // Start - Global function to start the client.
 func Start(conf *config.Config) {
 	// Initialize rabbit connection and get ready to publish.
-	r, err := rabbit.NewRabbit(conf.Username, conf.Pass, conf.Address, conf.Port, conf.ExchangeName, conf.ExchangeType)
-	if err != nil {
-		log.Fatal(err)
-	}
+	r := rabbit.NewRabbit(conf.Username, conf.Pass, conf.Address, conf.Port, conf.ExchangeName, conf.ExchangeType)
 
 	// Start detection of bluetooth data
 	dataChannel := make(chan blueData)

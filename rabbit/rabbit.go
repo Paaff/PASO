@@ -14,21 +14,17 @@ type Rabbit struct {
 }
 
 // NewRabbit - Initialization function for a Rabbit struct
-func NewRabbit(username string, pass string, address string, port string, exchangeName string, exchangeType string) (*Rabbit, error) {
+func NewRabbit(username string, pass string, address string, port string, exchangeName string, exchangeType string) *Rabbit {
 	dialPath := createDialPath(username, pass, address, port)
-	conn, err := amqp.Dial(dialPath)
-	if err != nil {
-		log.Fatal("Failed to connect to RabbitMQ")
-		return nil, err
-	}
+	conn := dialConnection(dialPath)
+	ch := openChannel(conn)
 
-	ch, err := conn.Channel()
-	if err != nil {
-		log.Fatal("Failed to open a channel")
-		return nil, err
-	}
+	r := Rabbit{conn, ch}
+	return &r
+}
 
-	err = ch.ExchangeDeclare(
+func declareExchange(ch *amqp.Channel, exchangeName string, exchangeType string) {
+	err := ch.ExchangeDeclare(
 		exchangeName, // name
 		exchangeType, // type
 		true,         // durable
@@ -39,12 +35,23 @@ func NewRabbit(username string, pass string, address string, port string, exchan
 	)
 	if err != nil {
 		log.Fatal("Failed to declare an exchange")
-		return nil, err
 	}
+}
 
-	r := Rabbit{conn, ch}
-	return &r, nil
+func openChannel(conn *amqp.Connection) *amqp.Channel {
+	ch, err := conn.Channel()
+	if err != nil {
+		log.Fatal("Failed to open a channel")
+	}
+	return ch
+}
 
+func dialConnection(dialPath string) *amqp.Connection {
+	conn, err := amqp.Dial(dialPath)
+	if err != nil {
+		log.Fatal("Failed to connect to RabbitMQ")
+	}
+	return conn
 }
 
 func createDialPath(username string, pass string, address string, port string) string {
