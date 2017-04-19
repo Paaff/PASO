@@ -11,8 +11,8 @@ import (
 	"github.com/paaff/PASO/server"
 )
 
-var serverConfPath = "./serverconf.json"
-var clientConfPath = "./clientconf.json"
+var serverConfPath = "./config/serverconf.json"
+var clientConfPath = "./config/clientconf.json"
 
 func main() {
 	// Check what instance should be launched.
