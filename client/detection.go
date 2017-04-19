@@ -8,34 +8,30 @@ import (
 	"time"
 )
 
-// Collection of found phones
-var detectedPhones []blueData
-
 // BT detection
 func detectBluetooth(dataChannel chan blueData) {
-
 	// Periodically scan for bluetooth devices.
 	t := time.NewTicker(15 * time.Second)
 	for {
-		dataChannel <- scan()
+		scan(dataChannel)
 		<-t.C
 	}
 
 }
 
-func scan() blueData {
+func scan(dataChannel chan blueData) {
 	exec.Command("hcitool", "scan")
 	out, err := exec.Command("hcitool", "inq").Output()
 	if err != nil {
 		fmt.Printf("%s", err)
 	}
 
-	return findAndDiscoverBClass(out)
+	findAndDiscoverBClass(out, dataChannel)
 
 }
 
 // Trimming the output of Bluetooth inq command
-func findAndDiscoverBClass(inq []byte) blueData {
+func findAndDiscoverBClass(inq []byte, dataChannel chan blueData) {
 
 	//TODO: Refactor phone return
 	var phone blueData
@@ -52,13 +48,12 @@ func findAndDiscoverBClass(inq []byte) blueData {
 			if checkBtClass(bluetoothLine[5]) {
 				phone = blueData{bdaddress: bluetoothLine[0], class: bluetoothLine[5]}
 				fmt.Printf("The bluetooth address %v, and the class is %v\n", bluetoothLine[0], bluetoothLine[5])
-				return phone
+				dataChannel <- phone
 			}
 
 		}
 
 	}
-	return phone
 
 }
 
