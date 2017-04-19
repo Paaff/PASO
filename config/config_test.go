@@ -2,6 +2,7 @@ package config
 
 import (
 	"log"
+	"os"
 	"testing"
 )
 
@@ -9,7 +10,7 @@ func TestClientConfigLoadedIntoStruct(t *testing.T) {
 	path := "./clientconf_example.json"
 	c, err := LoadConfig(path)
 	if err != nil {
-		log.Fatal(err)
+		t.Errorf("An error appeared, err:%v", err)
 	}
 	if c.Type != "CLIENT" {
 		t.Errorf("Not correct type: %v", c.Type)
@@ -49,7 +50,7 @@ func TestServerConfigLoadedIntoStruct(t *testing.T) {
 	path := "./serverconf_example.json"
 	c, err := LoadConfig(path)
 	if err != nil {
-		log.Fatal(err)
+		t.Errorf("An error appeared, err:%v", err)
 	}
 
 	if c.Type != "SERVER" {
@@ -82,5 +83,51 @@ func TestServerConfigLoadedIntoStruct(t *testing.T) {
 
 	if c.RoutingKey != "ROUTING_KEY" {
 		t.Errorf("Not correct routing key: %v", c.RoutingKey)
+	}
+}
+
+func TestWrongPathConfig(t *testing.T) {
+	wrongPath := "wrongpath"
+	_, err := LoadConfig(wrongPath)
+
+	if err == nil {
+		t.Errorf("Error was nil, but was expected to be not nil")
+	}
+}
+
+func TestWrongConfigJSONLayout(t *testing.T) {
+	file, err := os.Open("wrongJsonContent.json")
+	if err != nil {
+		log.Fatalf("Error in the creation of a testing mock file, err: %v", err)
+	}
+
+	var conf Config
+	_, err = decodeConfig(file, &conf)
+	if err == nil {
+		if conf.Type != "TYPE" || conf.Username != "USERNAME" || conf.Pass != "PASSWORD" ||
+			conf.Address != "ADDRESS" || conf.Port != "PORT" || conf.ExchangeName != "EXCHANGE_NAME" ||
+			conf.ExchangeType != "EXCHANGE_TYPE" || conf.RoutingKey != "ROUTING_KEY" {
+			t.Errorf("The config struct was not loaded properly, config is: %v", conf)
+		}
+	}
+}
+
+func TestWrongJSONFormat(t *testing.T) {
+	file, err := os.Open("wrongJSONFormat.json")
+	if err != nil {
+		log.Fatalf("Error in the creation of a testing mock file, err: %v", err)
+	}
+
+	var conf Config
+	_, err = decodeConfig(file, &conf)
+	if err != nil {
+
+	} else {
+		t.Error(err)
+		if conf.Type != "TYPE" || conf.Username != "USERNAME" || conf.Pass != "PASSWORD" ||
+			conf.Address != "ADDRESS" || conf.Port != "PORT" || conf.ExchangeName != "EXCHANGE_NAME" ||
+			conf.ExchangeType != "EXCHANGE_TYPE" || conf.RoutingKey != "ROUTING_KEY" {
+			t.Errorf("The config struct was not loaded properly, config is: %v", conf)
+		}
 	}
 }

@@ -1,0 +1,12 @@
+
+	{
+		"wrong": "extra tag should not be considered",
+		"type": "TYPE",
+		"username": "USERNAME",
+		"password": "PASSWORD",
+		"address": "ADDRESS",
+		"port": "PORT",
+		"exchangeName": "EXCHANGE_NAME",
+		"exchangeType": "EXCHANGE_TYPE",
+		"routingKey": "ROUTING_KEY"
+	}

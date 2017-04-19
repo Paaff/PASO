@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 )
 
@@ -20,17 +21,17 @@ type Config struct {
 // LoadConfig - Loads the config from the given conf path.
 func LoadConfig(confPath string) (*Config, error) {
 	var conf Config
-	config, osErr := os.Open(confPath)
+	configFile, osErr := os.Open(confPath)
 	if osErr != nil {
 		return &conf, osErr
 	}
-
-	decoder := json.NewDecoder(config)
-	if err := decoder.Decode(&conf); err != nil {
-		return &conf, err
-	}
-	return &conf, nil
-
+	return decodeConfig(configFile, &conf)
 }
 
-// Methods for config struct
+func decodeConfig(configFile *os.File, conf *Config) (*Config, error) {
+	decoder := json.NewDecoder(configFile)
+	if err := decoder.Decode(&conf); err != nil {
+		return conf, fmt.Errorf("Error while decoding the configfile into a config struct, err: %v", err)
+	}
+	return conf, nil
+}
