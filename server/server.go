@@ -1,9 +1,11 @@
 package server
 
 import (
+	"encoding/json"
 	"log"
 
 	"github.com/paaff/PASO/config"
+	"github.com/streadway/amqp"
 )
 
 // Start - Global function to start the server.
@@ -17,12 +19,25 @@ func Start(conf *config.Config) {
 	// TODO: Initialize worker to
 	go func() {
 		for d := range msgs {
-			log.Printf(" [x] %s", d.Body)
+			log.Print("Message recieved..")
+			convertBTData(d)
 		}
 	}()
 
 	log.Printf("Server is running. Press CTRL+C to exit.")
 	<-forever
+}
+
+func convertBTData(delivery amqp.Delivery) {
+	var phone blueData
+
+	err := json.Unmarshal(delivery.Body, &phone)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Printf("Phone address: %s\nPhone class: %s", phone.bdaddress, phone.class)
+
 }
 
 type blueData struct {

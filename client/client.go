@@ -18,6 +18,7 @@ func Start(conf *config.Config) {
 	dataChannel := make(chan blueData)
 	go detectBluetooth(dataChannel)
 	for data := range dataChannel {
+		log.Printf("About to publish this phone: %s", data.bdaddress)
 		publish(data, r, conf)
 	}
 
