@@ -40,7 +40,7 @@ func publish(data blueData, r *rabbit.Rabbit, conf *config.Config) {
 		})
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("It could not publish, err: %v", err)
 	}
 
 }
