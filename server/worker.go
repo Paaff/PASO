@@ -13,15 +13,15 @@ func initWorker(conf *config.Config) <-chan amqp.Delivery {
 	r := rabbit.NewRabbit(conf.Username, conf.Pass, conf.Address, conf.Port, conf.ExchangeName, conf.ExchangeType)
 
 	queue, err := r.Channel.QueueDeclare(
-		"",    // name
-		false, // durable
-		false, // delete when usused
-		true,  // exclusive
-		false, // no-wait
-		nil,   // arguments
+		"testqueue", // name
+		false,       // durable
+		false,       // delete when usused
+		true,        // exclusive
+		false,       // no-wait
+		nil,         // arguments
 	)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Error in queue declare: %v", err)
 	}
 
 	err = r.Channel.QueueBind(
@@ -31,7 +31,7 @@ func initWorker(conf *config.Config) <-chan amqp.Delivery {
 		false,
 		nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Error in Queuebind: %v", err)
 	}
 
 	msgs, err := r.Channel.Consume(
@@ -44,7 +44,7 @@ func initWorker(conf *config.Config) <-chan amqp.Delivery {
 		nil,        // args
 	)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Error in Channel consuming: %v", err)
 	}
 
 	return msgs
