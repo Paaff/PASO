@@ -27,26 +27,24 @@ func scan(dataChannel chan blueData) {
 		fmt.Printf("%s", err)
 	}
 
-	findAndDiscoverBClass(out, dataChannel)
+	findAndDiscoverBTClass(out, dataChannel)
 
 }
 
 // Trimming the output of Bluetooth inq command
-func findAndDiscoverBClass(inq []byte, dataChannel chan blueData) {
+func findAndDiscoverBTClass(inq []byte, dataChannel chan blueData) {
 
 	//TODO: Refactor phone return
 	var phone blueData
 	// split string up for each
 	bluetoothList := strings.Split(string(inq), "\n")
 	for i, line := range bluetoothList {
-
 		// Disregard first line of hcitool inq as it just returns "Inquring ..."
 		// And the last line, as it is empty
 		if i > 0 && i != len(bluetoothList)-1 {
 			bluetoothLine := strings.Fields(line)
-
 			// Check that we have the correct class (Phone)
-			if checkBtClass(bluetoothLine[5]) {
+			if checkBTClass(bluetoothLine[5]) {
 				phone = blueData{bdaddress: bluetoothLine[0], class: bluetoothLine[5]}
 				fmt.Printf("The bluetooth address %v, and the class is %v\n", bluetoothLine[0], bluetoothLine[5])
 				dataChannel <- phone
@@ -55,11 +53,12 @@ func findAndDiscoverBClass(inq []byte, dataChannel chan blueData) {
 		}
 
 	}
+	close(dataChannel)
 
 }
 
 // Takes a hexadecimal number and interprets the binary representation as what class is embedded there.
-func checkBtClass(hexClass string) bool {
+func checkBTClass(hexClass string) bool {
 	// Strip the identifier 0x
 	rawHex := hexClass[2:]
 
@@ -68,7 +67,7 @@ func checkBtClass(hexClass string) bool {
 	if err != nil {
 		log.Fatal(err)
 	}
-	return isFlipped(classBits, 22)
+	return isMajorDeviceClassPhone(classBits)
 }
 
 func isFlipped(val []uint64, n int) bool {

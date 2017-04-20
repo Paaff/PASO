@@ -1,10 +1,33 @@
 package client
 
 import (
+	"fmt"
 	"log"
 	"reflect"
 	"testing"
 )
+
+func TestFindAndDiscoverBTClass(t *testing.T) {
+	dataChannel := make(chan blueData)
+	inqOutput := fmt.Sprint("Inquiring ...\n24:DA:9B:BB:EE:2B       clock offset: 0x51c4    class: 0x5a020c\n s")
+
+	go findAndDiscoverBTClass([]byte(inqOutput), dataChannel)
+
+	var phoneReceived blueData
+	phoneReceived = <-dataChannel
+	fmt.Println(phoneReceived.bdaddress)
+	fmt.Println(phoneReceived.class)
+
+}
+
+func TestCheckBTClass(t *testing.T) {
+	rawHex := "0x5a020c"
+	isBTClassPhone := checkBTClass(rawHex)
+	if !isBTClassPhone {
+		t.Errorf("Raw hex should be identified as a phone, result was: %v", isBTClassPhone)
+	}
+
+}
 
 func TestConvertBTClassHexToBinary(t *testing.T) {
 	// Hex string matching Smartphone.
