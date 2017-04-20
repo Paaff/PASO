@@ -18,7 +18,7 @@ func NewRabbit(username string, pass string, address string, port string, exchan
 	dialPath := createDialPath(username, pass, address, port)
 	conn := dialConnection(dialPath)
 	ch := openChannel(conn)
-
+	declareExchange(ch, exchangeName, exchangeType)
 	r := Rabbit{conn, ch}
 	return &r
 }

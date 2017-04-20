@@ -5,12 +5,13 @@ import (
 
 	"github.com/paaff/PASO/config"
 	"github.com/paaff/PASO/rabbit"
-	"github.com/streadway/amqp"
 )
 
 // InitWorker is a function to be called by the servers main function enabling a connection to be made to the RabbitMQ server.
-func initWorker(conf *config.Config) <-chan amqp.Delivery {
+func initWorker(conf *config.Config) {
 	r := rabbit.NewRabbit(conf.Username, conf.Pass, conf.Address, conf.Port, conf.ExchangeName, conf.ExchangeType)
+	r.Connection.Close()
+	r.Channel.Close()
 
 	queue, err := r.Channel.QueueDeclare(
 		"testqueue", // name
@@ -47,5 +48,10 @@ func initWorker(conf *config.Config) <-chan amqp.Delivery {
 		log.Fatalf("Error in Channel consuming: %v", err)
 	}
 
-	return msgs
+	go func() {
+		for d := range msgs {
+			log.Print("Message recieved..")
+			convertBTData(d)
+		}
+	}()
 }
