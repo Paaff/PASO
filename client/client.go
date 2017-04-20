@@ -12,8 +12,7 @@ import (
 func Start(conf *config.Config) {
 	// Initialize rabbit connection and get ready to publish.
 	r := rabbit.NewRabbit(conf.Username, conf.Pass, conf.Address, conf.Port, conf.ExchangeName, conf.ExchangeType)
-	defer r.Connection.Close()
-	defer r.Channel.Close()
+
 	// Start detection of bluetooth data
 	dataChannel := make(chan BlueData)
 	go detectBluetooth(dataChannel)

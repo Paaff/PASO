@@ -10,8 +10,6 @@ import (
 // InitWorker is a function to be called by the servers main function enabling a connection to be made to the RabbitMQ server.
 func initWorker(conf *config.Config) {
 	r := rabbit.NewRabbit(conf.Username, conf.Pass, conf.Address, conf.Port, conf.ExchangeName, conf.ExchangeType)
-	defer r.Connection.Close()
-	defer r.Channel.Close()
 
 	queue, err := r.Channel.QueueDeclare(
 		"testqueue", // name
