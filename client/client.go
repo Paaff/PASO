@@ -15,16 +15,16 @@ func Start(conf *config.Config) {
 	r := rabbit.NewRabbit(conf.Username, conf.Pass, conf.Address, conf.Port, conf.ExchangeName, conf.ExchangeType)
 
 	// Start detection of bluetooth data
-	dataChannel := make(chan blueData)
+	dataChannel := make(chan BlueData)
 	go detectBluetooth(dataChannel)
 	for data := range dataChannel {
-		log.Printf("About to publish this phone: %s", data.bdaddress)
+		log.Printf("About to publish this phone: %s", data.Bdaddress)
 		publish(data, r, conf)
 	}
 
 }
 
-func publish(data blueData, r *rabbit.Rabbit, conf *config.Config) {
+func publish(data BlueData, r *rabbit.Rabbit, conf *config.Config) {
 	jsonData, err := json.Marshal(data)
 	if err != nil {
 		log.Fatal(err)

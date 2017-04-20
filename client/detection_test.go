@@ -8,15 +8,15 @@ import (
 )
 
 func TestFindAndDiscoverBTClass(t *testing.T) {
-	dataChannel := make(chan blueData)
+	dataChannel := make(chan BlueData)
 	inqOutput := fmt.Sprint("Inquiring ...\n24:DA:9B:BB:EE:2B       clock offset: 0x51c4    class: 0x5a020c\n s")
 
 	go findAndDiscoverBTClass([]byte(inqOutput), dataChannel)
 
-	var phoneReceived blueData
+	var phoneReceived BlueData
 	phoneReceived = <-dataChannel
-	fmt.Println(phoneReceived.bdaddress)
-	fmt.Println(phoneReceived.class)
+	fmt.Println(phoneReceived.Bdaddress)
+	fmt.Println(phoneReceived.Class)
 
 }
 
