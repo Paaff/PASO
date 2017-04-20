@@ -1,7 +1,6 @@
 package client
 
 import (
-	"encoding/json"
 	"log"
 
 	"github.com/paaff/PASO/config"
@@ -26,19 +25,19 @@ func Start(conf *config.Config) {
 }
 
 func publish(data BlueData, r *rabbit.Rabbit, conf *config.Config) {
-	jsonData, err := json.Marshal(data)
+	/*jsonData, err := json.Marshal(data)
 	if err != nil {
 		log.Fatal(err)
-	}
+	}*/
 
-	err = r.Channel.Publish(
+	err := r.Channel.Publish(
 		conf.ExchangeName, // exchange
 		conf.RoutingKey,   // routing key
 		false,             // mandatory
 		false,             // immediate
 		amqp.Publishing{
-			ContentType: "application/json",
-			Body:        jsonData,
+			ContentType: "text/plain",
+			Body:        []byte("jsonData"),
 		})
 
 	if err != nil {

@@ -50,7 +50,7 @@ func initWorker(conf *config.Config) {
 
 	go func() {
 		for d := range msgs {
-			log.Print("Message recieved..")
+			log.Printf("Message recieved..: %s", string(d.Body))
 			convertBTData(d)
 		}
 	}()
