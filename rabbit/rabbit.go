@@ -57,3 +57,47 @@ func dialConnection(dialPath string) *amqp.Connection {
 func createDialPath(username string, pass string, address string, port string) string {
 	return fmt.Sprintf("amqp://%s:%s@%s:%s/", username, pass, address, port)
 }
+
+// Consume - Declare's, binds and consumes
+func (r *Rabbit) Consume(routingKey string, exchangeName string) {
+	queue, err := r.Channel.QueueDeclare(
+		"testqueue", // name
+		false,       // durable
+		false,       // delete when usused
+		true,        // exclusive
+		false,       // no-wait
+		nil,         // arguments
+	)
+	if err != nil {
+		log.Fatalf("Error in queue declare: %v", err)
+	}
+
+	err = r.Channel.QueueBind(
+		queue.Name,   // queue name
+		routingKey,   // routing key
+		exchangeName, // exchange
+		false,
+		nil)
+	if err != nil {
+		log.Fatalf("Error in Queuebind: %v", err)
+	}
+
+	msgs, err := r.Channel.Consume(
+		queue.Name, // queue
+		"",         // consumer
+		true,       // auto ack
+		false,      // exclusive
+		false,      // no local
+		false,      // no wait
+		nil,        // args
+	)
+	if err != nil {
+		log.Fatalf("Error in Channel consuming: %v", err)
+	}
+
+	go func() {
+		for d := range msgs {
+			log.Printf("Message recieved..: %s", string(d.Body))
+		}
+	}()
+}
