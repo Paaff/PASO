@@ -2,6 +2,7 @@ package client
 
 import (
 	"fmt"
+	"log"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -62,24 +63,62 @@ func checkBtClass(hexClass string) bool {
 	// Strip the identifier 0x
 	rawHex := hexClass[2:]
 
-	// Convert string to int
-	classInt, err := strconv.ParseUint(rawHex, 16, 32)
-	if err != nil {
-		fmt.Printf("%s", err)
-	}
 	// Find out if the binary representation matches that of a phone.
-	/*
-		Bit 22 = Telephony
-		Bit 12-11-10-9-8 = 00010 = Phone
-		Bit 7-6-5-4-3-2 = 000011 = Smart Phone
-	*/
-
-	return checkBitN(classInt, 22)
+	classBits, err := convertBTClassHexToBinary(rawHex)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return isFlipped(classBits, 22)
 }
 
-// TODO: 64 and 32 bit, will this clash?
-func checkBitN(val uint64, n uint32) bool {
-	return 1<<n&val > 0
+func isFlipped(val []uint64, n int) bool {
+	index := len(val) - 1 - n
+	return val[index] == 1
+}
+
+// Function to convert hex number in string type to its integer representation.
+func convertBTClassHexToBinary(classHex string) ([]uint64, error) {
+	// Class bit array is 24 bits long.
+	bitArray := []uint64{}
+
+	// Convert string to int
+	classInt, err := strconv.ParseUint(classHex, 16, 64)
+	if err != nil {
+		return bitArray, fmt.Errorf("Error in string to int conversion: %v", err)
+	}
+
+	// Convert int to binary representation in an array type.
+	bitArray = asBits(classInt)
+	return bitArray, nil
+}
+
+func asBits(val uint64) []uint64 {
+	bits := []uint64{}
+	for i := 0; i < 24; i++ {
+		bits = append([]uint64{val & 0x1}, bits...)
+		val = val >> 1
+	}
+	return bits
+}
+
+func isMajorDeviceClassPhone(classBits []uint64) bool {
+	/*
+		Major Device Class Phone.
+		Bit 	8 - 9 - 10 - 11 - 12
+		Value 0 - 1 - 0  - 0  - 0
+	*/
+	return !isFlipped(classBits, 8) && isFlipped(classBits, 9) && !isFlipped(classBits, 10) &&
+		!isFlipped(classBits, 11) && !isFlipped(classBits, 12)
+}
+
+func isMinorDeviceClassSmartPhone(classBits []uint64) bool {
+	/*
+		Minor Device Class Smartphone.
+		Bit 	2 - 3 - 4 - 5 - 6 - 7
+		Value 1 - 1 - 0 - 0 - 0 - 0
+	*/
+	return isFlipped(classBits, 2) && isFlipped(classBits, 3) && !isFlipped(classBits, 4) &&
+		!isFlipped(classBits, 5) && !isFlipped(classBits, 6) && !isFlipped(classBits, 7)
 }
 
 // Wifi detection

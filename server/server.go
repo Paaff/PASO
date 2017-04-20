@@ -16,7 +16,6 @@ func Start(conf *config.Config) {
 	// Make the server run forever with an unbuffered channel.
 	forever := make(chan bool)
 
-	// TODO: Initialize worker to
 	go func() {
 		for d := range msgs {
 			log.Print("Message recieved..")
