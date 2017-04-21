@@ -1,6 +1,7 @@
 package client
 
 import (
+	"encoding/json"
 	"log"
 
 	"github.com/paaff/PASO/config"
@@ -19,7 +20,11 @@ func Start(conf *config.Config) {
 	}
 	for data := range dataChannel {
 		log.Printf("About to publish this phone: %s", data.Bdaddress)
-		w.PublishMessage(data.Bdaddress, conf.ExchangeName, conf.RoutingKey)
+		jsonData, err := json.Marshal(data)
+		if err != nil {
+			log.Fatal(err)
+		}
+		w.PublishMessage(jsonData, conf.ExchangeName, conf.RoutingKey)
 	}
 
 }

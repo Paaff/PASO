@@ -16,13 +16,13 @@ func InitWabbitPublisher(username, pass, address, port, exchangeName, exchangeTy
 }
 
 // PublishMessage will publish the message.
-func (w *Wabbit) PublishMessage(body string, exchangeName string, routingKey string) error {
+func (w *Wabbit) PublishMessage(body []byte, exchangeName string, routingKey string) error {
 	return w.channel.Publish(
 		exchangeName, // exchange
 		routingKey,   // routing key
-		[]byte(body),
+		body,
 		wabbit.Option{
 			"deliveryMode": 2,
-			"contentType":  "text/plain",
+			"contentType":  "application/json",
 		})
 }
