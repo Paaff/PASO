@@ -6,13 +6,14 @@ import (
 
 	"github.com/paaff/PASO/client"
 	"github.com/paaff/PASO/config"
+	"github.com/paaff/PASO/wabbit"
 	"github.com/streadway/amqp"
 )
 
 // Start - Global function to start the server.
 func Start(conf *config.Config) {
 	// Start connection with RabitMQ server.
-	go initWorker(conf)
+	go wabbit.InitWabbitConsumer(conf.Username, conf.Pass, conf.Address, conf.Port, "bluetoothqueue", conf.ExchangeName, conf.ExchangeType, conf.RoutingKey)
 
 	// Make the server run forever with an unbuffered channel.
 	forever := make(chan bool)
