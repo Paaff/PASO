@@ -2,12 +2,12 @@ package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 
 	"github.com/paaff/PASO/client"
 	"github.com/paaff/PASO/config"
 	"github.com/paaff/PASO/wabbit"
-	"github.com/streadway/amqp"
 )
 
 // Start - Global function to start the server.
@@ -26,7 +26,7 @@ func Start(conf *config.Config) {
 			}
 			err := json.Unmarshal(d.Body(), &data)
 			if err != nil {
-				log.Fatal(err)
+				fmt.Println("Unmarshalling went wrong")
 			}
 		}
 	}()
@@ -35,16 +35,4 @@ func Start(conf *config.Config) {
 
 	log.Printf("Server is running. Press CTRL+C to exit.")
 	<-forever
-}
-
-func convertBTData(delivery amqp.Delivery) {
-	var phone client.BlueData
-
-	err := json.Unmarshal(delivery.Body, &phone)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	log.Printf("Phone address: %s\nPhone class: %s", phone.Bdaddress, phone.Class)
-
 }
