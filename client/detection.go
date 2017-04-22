@@ -33,8 +33,6 @@ func scan(dataChannel chan BlueData) {
 
 // Trimming the output of Bluetooth inq command
 func findAndDiscoverBTClass(inq []byte, dataChannel chan BlueData) {
-
-	//TODO: Refactor phone return
 	var phone BlueData
 	// split string up for each
 	bluetoothList := strings.Split(string(inq), "\n")
@@ -53,7 +51,6 @@ func findAndDiscoverBTClass(inq []byte, dataChannel chan BlueData) {
 		}
 
 	}
-	close(dataChannel)
 
 }
 
