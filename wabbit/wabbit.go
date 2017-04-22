@@ -9,34 +9,34 @@ import (
 
 // Wabbit struct
 type Wabbit struct {
-	connection wabbit.Conn
-	channel    wabbit.Channel
+	Connection wabbit.Conn
+	Channel    wabbit.Channel
 }
 
 // NewWabbit returns a Wabbit struct in which the connection and channel can be accessed.
 func NewWabbit(username, pass, address, port, exchangeName, exchangeType string) (*Wabbit, error) {
 	// Create wabbit instance
 	w := &Wabbit{
-		connection: nil,
-		channel:    nil,
+		Connection: nil,
+		Channel:    nil,
 	}
 	var err error
 
 	// Dial connection
 	dialPath := createDialPath(username, pass, address, port)
-	w.connection, err = amqp.Dial(dialPath)
+	w.Connection, err = amqp.Dial(dialPath)
 	if err != nil {
 		return nil, fmt.Errorf("Dial: %s", err)
 	}
 
 	// Get channel
-	w.channel, err = w.connection.Channel()
+	w.Channel, err = w.Connection.Channel()
 	if err != nil {
 		return nil, fmt.Errorf("Channel: %s", err)
 	}
 
 	// Declare exchange
-	if err = w.channel.ExchangeDeclare(
+	if err = w.Channel.ExchangeDeclare(
 		exchangeName, // name of the exchange
 		exchangeType, // type
 		wabbit.Option{

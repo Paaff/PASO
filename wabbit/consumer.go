@@ -10,8 +10,8 @@ import (
 func InitWabbitConsumer(username, pass, address, port, queueName, exchangeName, exchangeType, routingKey string) (*Wabbit, error) {
 	// Ini consumer wabbit
 	consumer := &Wabbit{
-		connection: nil,
-		channel:    nil,
+		Connection: nil,
+		Channel:    nil,
 	}
 	var err error
 	consumer, err = NewWabbit(username, pass, address, port, exchangeName, exchangeType)
@@ -20,7 +20,7 @@ func InitWabbitConsumer(username, pass, address, port, queueName, exchangeName, 
 	}
 
 	// Wabbit is running, extend it to be a consumer by declaring a queue
-	queue, err := consumer.channel.QueueDeclare(
+	queue, err := consumer.Channel.QueueDeclare(
 		queueName, // name of the queue
 		wabbit.Option{
 			"durable":   true,
@@ -34,7 +34,7 @@ func InitWabbitConsumer(username, pass, address, port, queueName, exchangeName, 
 	}
 
 	// Bind the queue to exchange using the routing key.
-	if err = consumer.channel.QueueBind(
+	if err = consumer.Channel.QueueBind(
 		queue.Name(), // name of the queue
 		routingKey,   // bindingKey
 		exchangeName, // sourceExchange
@@ -52,11 +52,11 @@ func InitWabbitConsumer(username, pass, address, port, queueName, exchangeName, 
 // ConsumeMessage will consume send them to the channel given
 func (w *Wabbit) ConsumeMessage(queueName string, recieverChan chan<- []byte) {
 	// Begin to consume messages
-	msgs, err := w.channel.Consume(
+	msgs, err := w.Channel.Consume(
 		queueName, // name
 		"",        // consumerTag,
 		wabbit.Option{
-			"noAck":     false,
+			"autoAck":   true,
 			"exclusive": false,
 			"noLocal":   false,
 			"noWait":    false,

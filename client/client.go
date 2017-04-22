@@ -19,6 +19,9 @@ func Start(conf *config.Config) {
 	if err != nil {
 		fmt.Println("Ini of publisher failed")
 	}
+	defer w.Connection.Close()
+	defer w.Channel.Close()
+
 	for data := range dataChannel {
 		log.Printf("About to publish this phone: %s", data)
 		jsonData, err := json.Marshal(data)

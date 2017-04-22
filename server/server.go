@@ -15,8 +15,10 @@ func Start(conf *config.Config) {
 	// Start connection with RabitMQ server.
 	w, err := wabbit.InitWabbitConsumer(conf.Username, conf.Pass, conf.Address, conf.Port, "bluetoothqueue", conf.ExchangeName, conf.ExchangeType, conf.RoutingKey)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("Ini of consumer failed")
 	}
+	defer w.Connection.Close()
+	defer w.Channel.Close()
 
 	var btData client.BlueData
 	serverChan := make(chan []byte)

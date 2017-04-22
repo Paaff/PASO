@@ -42,15 +42,15 @@ func testConsumeHelp(t *testing.T) {
 	mockServer.Start()
 
 	w := &Wabbit{
-		connection: nil,
-		channel:    nil,
+		Connection: nil,
+		Channel:    nil,
 	}
 
 	mockConn, err := amqptest.Dial("amqp://testUser:testPass@192.168.0.106:5672/")
 	if err != nil {
 		t.Error("Connection to the mock server failed.")
 	}
-	w.connection = mockConn
+	w.Connection = mockConn
 
 	mockCh, err := mockConn.Channel()
 	if err != nil {
@@ -65,7 +65,7 @@ func testConsumeHelp(t *testing.T) {
 	}); err != nil {
 		t.Error("Mock Exchange declaration failed")
 	}
-	w.channel = mockCh
+	w.Channel = mockCh
 
 	mockQ, err := mockCh.QueueDeclare("TestQueue", wabbit.Option{
 		"durable":   true,
@@ -108,15 +108,15 @@ func testPublishHelp(t *testing.T) {
 	mockServer.Start()
 
 	w := &Wabbit{
-		connection: nil,
-		channel:    nil,
+		Connection: nil,
+		Channel:    nil,
 	}
 
 	mockConn, err := amqptest.Dial("amqp://testUser:testPass@192.168.0.106:5672/")
 	if err != nil {
 		t.Error("Connection to the mock server failed.")
 	}
-	w.connection = mockConn
+	w.Connection = mockConn
 
 	mockCh, err := mockConn.Channel()
 	if err != nil {
@@ -131,7 +131,7 @@ func testPublishHelp(t *testing.T) {
 	}); err != nil {
 		t.Error("Mock Exchange declaration failed")
 	}
-	w.channel = mockCh
+	w.Channel = mockCh
 
 	// Publishing
 	d := &TestBT{

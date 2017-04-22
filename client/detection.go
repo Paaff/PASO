@@ -37,7 +37,7 @@ func findAndDiscoverBTClass(inq []byte, dataChannel chan BlueData) {
 	// split string up for each
 	bluetoothList := strings.Split(string(inq), "\n")
 	for i, line := range bluetoothList {
-		// Disregard first line of hcitool inq as it just returns "Inquring ..."
+		// Disregard first line of hcitool inq as it just returns "Inqusåring ..."
 		// And the last line, as it is empty
 		if i > 0 && i != len(bluetoothList)-1 {
 			bluetoothLine := strings.Fields(line)
