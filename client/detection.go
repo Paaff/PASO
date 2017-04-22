@@ -9,15 +9,15 @@ import (
 	"time"
 )
 
+type scanFunc func(dataChannel chan BlueData)
+
 // BT detection
 func detectBluetooth(dataChannel chan BlueData) {
-	// Periodically scan for bluetooth devices.
 	t := time.NewTicker(15 * time.Second)
 	for {
 		scan(dataChannel)
 		<-t.C
 	}
-
 }
 
 func scan(dataChannel chan BlueData) {

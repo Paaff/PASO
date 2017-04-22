@@ -13,23 +13,23 @@ import (
 // Start - Global function to start the server.
 func Start(conf *config.Config) {
 	// Start connection with RabitMQ server.
-	msgs, err := wabbit.InitWabbitConsumer(conf.Username, conf.Pass, conf.Address, conf.Port, "bluetoothqueue", conf.ExchangeName, conf.ExchangeType, conf.RoutingKey)
+	w, err := wabbit.InitWabbitConsumer(conf.Username, conf.Pass, conf.Address, conf.Port, "bluetoothqueue", conf.ExchangeName, conf.ExchangeType, conf.RoutingKey)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	go func() {
-		for d := range msgs {
-			data := &client.BlueData{
-				Bdaddress: "",
-				Class:     "",
-			}
-			err := json.Unmarshal(d.Body(), &data)
-			if err != nil {
-				fmt.Println("Unmarshalling went wrong")
-			}
+	var btData client.BlueData
+	serverChan := make(chan []byte)
+	go w.ConsumeMessage("bluetoothqueue", serverChan)
+
+	for jsonBlob := range serverChan {
+		if err = json.Unmarshal(jsonBlob, &btData); err != nil {
+			fmt.Println("Unmarshalling went wrong")
 		}
-	}()
+		fmt.Println(btData.Bdaddress, btData.Class, "It worked ???")
+
+	}
+
 	// Make the server run forever with an unbuffered channel.
 	forever := make(chan bool)
 

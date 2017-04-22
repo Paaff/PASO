@@ -7,7 +7,7 @@ import (
 )
 
 // InitWabbitConsumer creates a Wabbit and initializes it as a consumer
-func InitWabbitConsumer(username, pass, address, port, queueName, exchangeName, exchangeType, routingKey string) (<-chan wabbit.Delivery, error) {
+func InitWabbitConsumer(username, pass, address, port, queueName, exchangeName, exchangeType, routingKey string) (*Wabbit, error) {
 	// Ini consumer wabbit
 	consumer := &Wabbit{
 		connection: nil,
@@ -45,10 +45,16 @@ func InitWabbitConsumer(username, pass, address, port, queueName, exchangeName, 
 		return nil, fmt.Errorf("Queue Bind: %s", err)
 	}
 
+	return consumer, nil
+
+}
+
+// ConsumeMessage will consume send them to the channel given
+func (w *Wabbit) ConsumeMessage(queueName string, recieverChan chan<- []byte) {
 	// Begin to consume messages
-	msgs, err := consumer.channel.Consume(
-		queue.Name(), // name
-		"",           // consumerTag,
+	msgs, err := w.channel.Consume(
+		queueName, // name
+		"",        // consumerTag,
 		wabbit.Option{
 			"noAck":     false,
 			"exclusive": false,
@@ -57,9 +63,10 @@ func InitWabbitConsumer(username, pass, address, port, queueName, exchangeName, 
 		},
 	)
 	if err != nil {
-		return nil, fmt.Errorf("Queue Consume: %s", err)
+		fmt.Printf("Queue Consume: %s", err)
 	}
-
-	return msgs, nil
+	for d := range msgs {
+		recieverChan <- d.Body()
+	}
 
 }
