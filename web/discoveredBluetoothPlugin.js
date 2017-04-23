@@ -145,7 +145,7 @@ var myWidgetPlugin = function(settings) {
 };
 
   self.onCalculatedValueChanged = function(settingName, newValue) {
-    if(settingName == "the_text") {
+    if(settingName == "client_bt_address") {
       $(myTextElement).html(newValue);
     }
   };
