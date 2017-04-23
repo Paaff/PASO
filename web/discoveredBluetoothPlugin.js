@@ -94,7 +94,7 @@ freeboard.loadWidgetPlugin({
     {
       "name" : "client_bt_address",
       "display_name" : "Bluetooth Address",
-      "type" : "text"
+      "type" : "calculated"
     },
     {
       "name"        : "size",
