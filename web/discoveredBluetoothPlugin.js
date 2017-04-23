@@ -46,12 +46,13 @@
     /* This is some function where I'll get my data from somewhere */
 		function getData()
 		{
+      var newData = "";
+      fetch('http://localhost:3000/data').then(function(response) {
+        return response.text();
+      }).then(function(myText) {
+        newData = myText;
+      });
 
-
-			var newData = counter++; // Just putting some sample data in for fun.
-
-			/* Get my data from somewhere and populate newData with it... Probably a JSON API or something. */
-			/* ... */
       updateCallback(newData);
   }
 
