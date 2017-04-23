@@ -15,15 +15,17 @@ func InitBoard() {
 	http.Handle("/", http.FileServer(http.Dir(freeboard)))
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/data", retrieveBTData)
+	http.Handle("/api/", http.StripPrefix("/api", mux))
+	mux.HandleFunc("/data", RetrieveBTData)
 
-	err := http.ListenAndServe(":3000", nil)
+	err := http.ListenAndServe("192.168.0.109:3000", nil)
 	if err != nil {
 		fmt.Println(err)
 	}
 }
 
-func retrieveBTData(w http.ResponseWriter, r *http.Request) {
+// RetrieveBTData will provide bluetooth data gathered from the system.
+func RetrieveBTData(w http.ResponseWriter, r *http.Request) {
 	Counter++
-	fmt.Fprintf(w, "Hi there, I love %v!", Counter)
+	fmt.Fprintf(w, "This is the %v time the endpoint has been visited", Counter)
 }

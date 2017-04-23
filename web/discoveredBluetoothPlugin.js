@@ -41,7 +41,6 @@
   var myDatasourcePlugin = function(settings, updateCallback) {
     var self = this;
     var currentSettings = settings;
-    var counter = 0;
 
     /* This is some function where I'll get my data from somewhere */
 		function getData()
