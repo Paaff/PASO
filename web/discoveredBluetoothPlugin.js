@@ -41,11 +41,14 @@
   var myDatasourcePlugin = function(settings, updateCallback) {
     var self = this;
     var currentSettings = settings;
+    var counter = 0;
 
     /* This is some function where I'll get my data from somewhere */
 		function getData()
 		{
-			var newData = { hello : "world! it's " + new Date().toLocaleTimeString() }; // Just putting some sample data in for fun.
+
+
+			var newData = counter++; // Just putting some sample data in for fun.
 
 			/* Get my data from somewhere and populate newData with it... Probably a JSON API or something. */
 			/* ... */
@@ -91,7 +94,7 @@ freeboard.loadWidgetPlugin({
     {
       "name" : "client_bt_address",
       "display_name" : "Bluetooth Address",
-      "type" : "calculated"
+      "type" : "text"
     },
     {
       "name"        : "size",
