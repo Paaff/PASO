@@ -68,19 +68,19 @@
 
   self.onSettingsChanged = function(newSettings) {
     currentSettings = newSettings;
-  }
+  };
 
   self.updateNow = function() {
     getData();
-  }
+  };
 
   self.onDispose = function() {
     clearInterval(refreshTimer);
     refreshTimer = undefined;
-  }
+  };
 
   createRefreshTimer(currentSettings.refresh_time);
-}
+};
 
 freeboard.loadWidgetPlugin({
   "type_name" : "clients_discovered_widget_plugin",
@@ -112,7 +112,7 @@ freeboard.loadWidgetPlugin({
 
   ],
 
-  newInstance = function(settings, newInstanceCallback) {
+  newInstance : function(settings, newInstanceCallback) {
     newInstanceCallback(new myWidgetPlugin(settings));
   }
 });
@@ -123,7 +123,7 @@ var myWidgetPlugin = function(settings) {
   var myTextElement = $("<span></span>");
   self.render = function(containerElement) {
     $(containerElement).append(myTextElement);
-  }
+  };
 
   self.getHeight = function() {
     if(currentSettings.size == "big")
@@ -134,22 +134,22 @@ var myWidgetPlugin = function(settings) {
 			{
 				return 1;
 			}
-  }
+  };
 
 
   self.onSettingsChanged = function(newSettings) {
   currentSettings = newSettings;
-  }
+};
 
   self.onCalculatedValueChanged = function(settingName, newValue) {
     if(settingName == "the_text") {
       $(myTextElement).html(newValue);
     }
-  }
+  };
 
   self.onDispose = function() {
-  }
-}
+  };
+};
 
 
 }());
