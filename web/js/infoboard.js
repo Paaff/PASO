@@ -2,7 +2,7 @@
 // Bluetooth Client Component
 Vue.component('client-item', {
   props: ['client'],
-  template: '<tr><td>{{ client.name }}</td><td>{{ client.btaddress }}</td><td>{{ client.class }}</td><td>{{ client.timestamp }}</td></tr>'
+  template: ''
 });
 
 // Main Vue
