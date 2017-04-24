@@ -7,8 +7,8 @@ import (
 
 // InitBoard will start the web server and host index.html.
 func InitBoard() {
-	freeboard := "/web"
-	http.Handle("/", http.FileServer(http.Dir(freeboard)))
+	webDir := "./web"
+	http.Handle("/", http.FileServer(http.Dir(webDir)))
 
 	mux := http.NewServeMux()
 	http.Handle("/api/", http.StripPrefix("/api", mux))
