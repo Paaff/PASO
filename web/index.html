@@ -1,6 +1,44 @@
-<div id="app">
-  <p>{{ message }}</p>
-</div>
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Meta Information -->
+    <meta charset="utf-8">
+    <title>Infoboard</title>
+    <meta name="description" content="Infoboard with the purpose of showing detected client by bluetooth">
+    <meta name="author" content="Peter Fischer">
 
-<script src="https://unpkg.com/vue"></script>
-<script src="./js/infoboard.js"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/skeleton.css">
+    <link rel="stylesheet" href="css/custom.css">
+
+  </head>
+
+  <!-- Page layout  -->
+  <body>
+
+    <div class="container">
+      <section class="header">
+        <h1 class="title text-centered">Infoboard</h1>
+      </section>
+    </div>
+
+
+    <table id="app" class="u-full-width">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Bluetooth address</th>
+          <th>Bluetooth class</th>
+          <th>Latest detection time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <client-item v-for="item in clientList" v-bind:client="item"></client-item>
+      </tbody>
+    </table>
+
+    <script src="https://unpkg.com/vue"></script>
+    <script src="./js/infoboard.js"></script>
+  </body>
+</html>
