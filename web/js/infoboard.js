@@ -28,7 +28,7 @@ var vm = new Vue({
 });
 
 setInterval(function() {
-  fetch('http://localhost:3000/api/data').then(function(response) {
+  fetch('http://192.168.0.109:3000/api/data').then(function(response) {
     return response.json();
   }).then(function(client) {
     vm.clientList = client;
