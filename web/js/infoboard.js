@@ -37,6 +37,5 @@ setInterval(function() {
     return response.json();
   }).then(function(serverList) {
     vm.clientList = serverList;
-
   });
 }, 3000);
