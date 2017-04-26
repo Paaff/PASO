@@ -74,11 +74,11 @@ func (w *Wabbit) ConsumeMessage(queueName string) {
 			fmt.Println("Unmarshalling went wrong")
 		}
 
-		name, ok := store.ValidClientsMap.Get(recievedClient.Bdaddress)
-		fmt.Printf("Valid client name is %s, status is %v and recieved name was %s", name, ok, recievedClient.Name)
+		name, ok := store.ValidClientsMap.Get(recievedClient.Address)
+		fmt.Printf("Valid client name is %s, status is %v and recieved name was %s\n", name, ok, recievedClient.Name)
 		if ok {
 			recievedClient.Name = name
-			store.CollectedClients.Set(recievedClient.Bdaddress, recievedClient)
+			store.CollectedClients.Set(recievedClient.Address, recievedClient)
 		}
 
 	}

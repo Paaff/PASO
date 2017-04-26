@@ -44,9 +44,9 @@ func findAndDiscoverBTClass(inq []byte, dataChannel chan store.BlueData) {
 		if i > 0 && i != len(bluetoothList)-1 {
 			bluetoothLine := strings.Fields(line)
 			// Check that we have the correct class (Phone)
-			if checkBTClass(bluetoothLine[5]) {
-
-				phone = store.BlueData{Name: "", Bdaddress: bluetoothLine[0], Class: bluetoothLine[5], Timestamp: time.Now().Format(time.RFC850)}
+			name, ok := checkBTClass(bluetoothLine[5])
+			if ok {
+				phone = store.BlueData{Name: "", Address: bluetoothLine[0], Class: name, Timestamp: time.Now().Format(time.RFC850)}
 				fmt.Printf("The bluetooth address %v, and the class is %v\n", bluetoothLine[0], bluetoothLine[5])
 				dataChannel <- phone
 			}
@@ -58,7 +58,7 @@ func findAndDiscoverBTClass(inq []byte, dataChannel chan store.BlueData) {
 }
 
 // Takes a hexadecimal number and interprets the binary representation as what class is embedded there.
-func checkBTClass(hexClass string) bool {
+func checkBTClass(hexClass string) (string, bool) {
 	// Strip the identifier 0x
 	rawHex := hexClass[2:]
 
@@ -67,7 +67,13 @@ func checkBTClass(hexClass string) bool {
 	if err != nil {
 		log.Fatal(err)
 	}
-	return isMajorDeviceClassPhone(classBits)
+	if isMajorDeviceClassPhone(classBits) && isMinorDeviceClassSmartPhone(classBits) {
+		return "Smartphone", true
+	} else if isMajorDeviceClassPhone(classBits) && !isMinorDeviceClassSmartPhone(classBits) {
+		return "Phone", true
+	} else {
+		return "", false
+	}
 }
 
 func isFlipped(val []uint64, n int) bool {

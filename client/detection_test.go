@@ -17,14 +17,14 @@ func TestFindAndDiscoverBTClass(t *testing.T) {
 
 	var phoneReceived store.BlueData
 	phoneReceived = <-dataChannel
-	fmt.Println(phoneReceived.Bdaddress)
+	fmt.Println(phoneReceived.Address)
 	fmt.Println(phoneReceived.Class)
 
 }
 
 func TestCheckBTClass(t *testing.T) {
 	rawHex := "0x5a020c"
-	isBTClassPhone := checkBTClass(rawHex)
+	_, isBTClassPhone := checkBTClass(rawHex)
 	if !isBTClassPhone {
 		t.Errorf("Raw hex should be identified as a phone, result was: %v", isBTClassPhone)
 	}

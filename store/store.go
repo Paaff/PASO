@@ -49,7 +49,7 @@ func (cdm *ClientDataMap) GetAsSlice() []BlueData {
 // BlueData - Bluetooth data.
 type BlueData struct {
 	Name      string
-	Bdaddress string
+	Address   string
 	Class     string
 	Timestamp string
 }
