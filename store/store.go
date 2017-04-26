@@ -49,6 +49,27 @@ type BlueData struct {
 	Timestamp string
 }
 
+// ValidClientsMap is the global map to view the valid clients
+var ValidClientsMap ValidClients
+
 // ValidClients is a map that holds the predetermined information about which clients (names of them)
 // and their respective BT Address.
-var ValidClients map[string]string
+type ValidClients struct {
+	items map[string]string
+}
+
+// NewValidClientsMap initializes the map
+func (vm *ValidClients) NewValidClientsMap() {
+	vm.items = make(map[string]string)
+}
+
+// Set - Selfexplanatory
+func (vm *ValidClients) Set(key string, value string) {
+	vm.items[key] = value
+}
+
+// Get - Selfexplanatory
+func (vm *ValidClients) Get(key string) (string, bool) {
+	value, ok := vm.items[key]
+	return value, ok
+}
