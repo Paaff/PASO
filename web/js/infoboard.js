@@ -27,8 +27,8 @@ var vm = new Vue({
   },
   filters: {
     lastUpdated: function(value) {
-      moment().Parse("ddd, DD MMM YYYY HH:mm:SS ZZ");
-      return moment().from(value);
+    return moment(value).fromNow();
+
     }
   }
 });
