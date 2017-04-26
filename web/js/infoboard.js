@@ -27,7 +27,8 @@ var vm = new Vue({
   },
   filters: {
     lastUpdated: function(value) {
-    return moment(value).fromNow();
+      if (value !== null) return '';
+      return moment(value).fromNow();
 
     }
   }
