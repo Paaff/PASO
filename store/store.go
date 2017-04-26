@@ -5,32 +5,40 @@ import (
 )
 
 // CollectedClients holds all the current clients detected
-var CollectedClients ClientDataSlice
+var CollectedClients ClientDataMap
 
-// ClientDataSlice is a Global slice designed to hold the Bluedata items.
-type ClientDataSlice struct {
+// ClientDataMap is a Global slice designed to hold the Bluedata items.
+type ClientDataMap struct {
 	sync.RWMutex
-	items []BlueData
+	items map[string]BlueData
 }
 
-// ClientDataItem is of type BlueData
-type ClientDataItem struct {
-	Index int
-	Value BlueData
+// Set function will acquire a lock on the slice, append and release the lock.
+func (cdm *ClientDataMap) Set(key string, value BlueData) {
+	cdm.Lock()
+	defer cdm.Unlock()
+	cdm.items[key] = value
+
 }
 
-// Append function will acquire a lock on the slice, append and release the lock.
-func (cs *ClientDataSlice) Append(item BlueData) {
-	cs.Lock()
-	defer cs.Unlock()
-	cs.items = append(cs.items, item)
+// Get function will acquire a read lock and return the slice
+func (cdm *ClientDataMap) Get(key string) (BlueData, bool) {
+	cdm.RLock()
+	defer cdm.RUnlock()
+	value, ok := cdm.items[key]
+	return value, ok
 }
 
-// ReadHej function will acquire a read lock and return the slice
-func (cs *ClientDataSlice) Read() []BlueData {
-	cs.RLock()
-	defer cs.RUnlock()
-	return cs.items
+// GetAsSlice will pull each value from the map and return it as a slice of BlueData
+func (cdm *ClientDataMap) GetAsSlice() []BlueData {
+	var result []BlueData
+	cdm.RLock()
+	defer cdm.RUnlock()
+
+	for _, v := range cdm.items {
+		result = append(result, v)
+	}
+	return result
 }
 
 // BlueData - Bluetooth data.
@@ -40,3 +48,7 @@ type BlueData struct {
 	Class     string
 	Timestamp string
 }
+
+// ValidClients is a map that holds the predetermined information about which clients (names of them)
+// and their respective BT Address.
+var ValidClients map[string]string

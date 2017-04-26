@@ -25,5 +25,5 @@ func InitBoard() {
 
 // RetrieveBTData will provide bluetooth data gathered from the system.
 func RetrieveBTData(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(store.CollectedClients.Read())
+	json.NewEncoder(w).Encode(store.CollectedClients.GetAsSlice())
 }

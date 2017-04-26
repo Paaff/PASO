@@ -73,7 +73,12 @@ func (w *Wabbit) ConsumeMessage(queueName string) {
 		if err = json.Unmarshal(d.Body(), &recievedClient); err != nil {
 			fmt.Println("Unmarshalling went wrong")
 		}
-		store.CollectedClients.Append(recievedClient)
+
+		_, ok := store.ValidClients[recievedClient.Bdaddress]
+		if ok {
+			recievedClient.Name = store.ValidClients[recievedClient.Bdaddress]
+			store.CollectedClients.Set(recievedClient.Bdaddress, recievedClient)
+		}
 
 	}
 
