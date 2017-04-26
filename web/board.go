@@ -30,7 +30,10 @@ type s struct {
 
 // RetrieveBTData will provide bluetooth data gathered from the system.
 func RetrieveBTData(w http.ResponseWriter, r *http.Request) {
-	test := s{"testName", "testAddress", "testClass", "testTime"}
+
+	test := []s{s{"testName", "testAddress", "testClass", "testTime"},
+		s{"testName", "testAddress", "testClass", "testTime"},
+		s{"testName", "testAddress", "testClass", "testTime"}}
 	json.NewEncoder(w).Encode(test)
 
 }
