@@ -1,6 +1,7 @@
 // Bluetooth Client Component
 var ClientItem = {
   // Template
+  name: 'client-item',
   props: ['client'],
   template: `
   <div class="panel">
@@ -12,7 +13,7 @@ var ClientItem = {
           <li>Client: {{ client.Name }}</li>
           <li>Address: {{ client.Address }} </li>
           <li>Class: {{ client.Class }} </li>
-          <li>Last upated: {{ client.Timestap | updated }} </li>
+          <li>Last upated: {{ client.Timestap}} </li>
         </ul>
       </section>
   </div>
@@ -23,14 +24,12 @@ var ClientItem = {
 var vm = new Vue({
   el: '#app',
   data: {
-    clientList: []
-  },
-  components: {
-    'client-item': ClientItem
+    clientList: [],
+    testTime: "Mon, 02 Jan 2006 15:04:05 -0700"
   },
   filters: {
     updated: function (value) {
-      return "Working";
+     return moment(value).fromNow();
     }
   }
 });
