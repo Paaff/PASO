@@ -7,6 +7,9 @@
     <meta name="description" content="Infoboard with the purpose of showing detected client by bluetooth">
     <meta name="author" content="Peter Fischer">
 
+      <!-- FONT -->
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet">
+
     <!-- CSS -->
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/skeleton.css">
@@ -21,6 +24,30 @@
       <section class="header">
         <h1 class="title text-centered">Infoboard</h1>
       </section>
+      <div class="row">
+        <div class="eight columns">
+          <div class="panel-list">
+            <div class="panel-col" v-for="item in clientList">
+              <client-item v-bind:client="item"></client-item>
+            </div>
+          </div>
+        </div>
+        <div class="four columns panel">
+          <header>
+            <h5>Hello</h5>
+          </header>
+          <section>
+            <ul>
+              <li>Client: </li>
+              <li>Address: </li>
+              <li>Class: </li>
+              <li>Timestamp: </li>
+            </ul>
+          </section>
+        </div>
+      </div>
+
+
 
     </div>
 

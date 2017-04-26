@@ -1,17 +1,36 @@
-
 // Bluetooth Client Component
 Vue.component('client-item', {
+  // Template
   props: ['client'],
-  template: ''
+  template: `
+  <div class="panel">
+      <header>
+      <h5> {{ client.title }} </h5>
+      </header>
+      <section>
+        <ul>
+          <li>Client: {{ client.name }}</li>
+          <li>Address: {{ client.address }} </li>
+          <li>Class: {{ client.class }} </li>
+          <li>Timestamp: {{client.timestamp }} </li>
+        </ul>
+      </section>
+  </div>
+  `
 });
 
 // Main Vue
-new Vue({
+var vm = new Vue({
   el: '#app',
   data: {
-    clientList: [
-      { name: 'Mathias', btaddress: '12:5A:3F:3D:15', class: 'Smartphone class', timestamp: '13:37'},
-      { name: 'Peter', btaddress: '3B:2C:5F:7E:12', class: 'Smartphone class', timestamp: '01:37'}
-    ]
+    clientList: []
   }
 });
+
+setInterval(function() {
+  fetch('http://localhost:3000/api/data').then(function(response) {
+    return response.json();
+  }).then(function(client) {
+    vm.clientList = client;
+  });
+}, 3000);

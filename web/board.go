@@ -1,6 +1,7 @@
 package web
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -20,7 +21,16 @@ func InitBoard() {
 	}
 }
 
+type s struct {
+	Name      string
+	Address   string
+	Class     string
+	Timestamp string
+}
+
 // RetrieveBTData will provide bluetooth data gathered from the system.
 func RetrieveBTData(w http.ResponseWriter, r *http.Request) {
+	test := s{"testName", "testAddress", "testClass", "testTime"}
+	json.NewEncoder(w).Encode(test)
 
 }

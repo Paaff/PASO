@@ -1,7 +1,104 @@
-.client {
-  
+
+
+.client-board {
+  width: 100%;
+}
+
+.panel {
+  background-color: #2a2a2a;
+  box-shadow: 1px 1px 41px 1px rgba(0,0,0,0.31);
+  -webkit-box-shadow: 1px 1px 41px 1px rgba(0,0,0,0.31);
+  -moz-box-shadow: 1px 1px 41px 1px rgba(0,0,0,0.31);
+  width: 100%;
+}
+
+.panel-col {
+  float: left;
+  width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* Larger than mobile */
+@media (min-width: 400px) {
+  .panel-col {
+    width: 100%;
+  }
+}
+
+/* Larger than phablet (also point when grid becomes active) */
+@media (min-width: 550px) {
+  .panel-col {
+    width: 100%;
+  }
+}
+
+/* Larger than tablet */
+@media (min-width: 750px) {
+  .panel-col {
+    width: 50%;
+  }
+}
+
+/* Larger than bla */
+@media (min-width: 1500px) {
+  .panel-col {
+    width: 33.33%;
+  }
+}
+
+/* Larger than desktop */
+@media (min-width: 2000px) {
+  .panel-col {
+    width: 25%;
+  }
+}
+
+
+
+.panel header{
+  background-color: #272727;
+  height: 4rem;
+  margin: 0;
+  padding: 1rem;
+  color: #8b8b8b;
+  text-transform: uppercase;
+}
+
+.panel section{
+  padding: 2rem;
+}
+
+.panel-list {
+  display: inline-block;
+  width: 100%;
+  margin-top: -1rem;
+}
+
+
+.container {
+  width: 100%;
+  max-width: none;
+  padding: 5rem;
 }
 
 .text-centered {
   text-align: center;
+}
+
+
+
+
+
+html {
+  background-color: #101214;
+  min-height: 100vh;
+}
+
+body {
+  color: #d3d4d4;
+}
+
+.header {
+  padding: 5rem
 }
