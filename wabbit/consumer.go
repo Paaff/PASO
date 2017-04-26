@@ -1,9 +1,11 @@
 package wabbit
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/NeowayLabs/wabbit"
+	"github.com/paaff/PASO/store"
 )
 
 // InitWabbitConsumer creates a Wabbit and initializes it as a consumer
@@ -50,7 +52,7 @@ func InitWabbitConsumer(username, pass, address, port, queueName, exchangeName, 
 }
 
 // ConsumeMessage will consume send them to the channel given
-func (w *Wabbit) ConsumeMessage(queueName string, recieverChan chan<- []byte) {
+func (w *Wabbit) ConsumeMessage(queueName string) {
 	// Begin to consume messages
 	msgs, err := w.Channel.Consume(
 		queueName, // name
@@ -65,8 +67,14 @@ func (w *Wabbit) ConsumeMessage(queueName string, recieverChan chan<- []byte) {
 	if err != nil {
 		fmt.Printf("Queue Consume: %s", err)
 	}
+
+	var recievedClient store.BlueData
 	for d := range msgs {
-		recieverChan <- d.Body()
+		if err = json.Unmarshal(d.Body(), &recievedClient); err != nil {
+			fmt.Println("Unmarshalling went wrong")
+		}
+		store.CollectedClients.Append(recievedClient)
+
 	}
 
 }

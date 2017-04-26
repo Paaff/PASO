@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/paaff/PASO/store"
 )
 
 // InitBoard will start the web server and host index.html.
@@ -21,19 +23,7 @@ func InitBoard() {
 	}
 }
 
-type s struct {
-	Name      string
-	Address   string
-	Class     string
-	Timestamp string
-}
-
 // RetrieveBTData will provide bluetooth data gathered from the system.
 func RetrieveBTData(w http.ResponseWriter, r *http.Request) {
-
-	test := []s{s{"testName", "testAddress", "testClass", "testTime"},
-		s{"testName", "testAddress", "testClass", "testTime"},
-		s{"testName", "testAddress", "testClass", "testTime"}}
-	json.NewEncoder(w).Encode(test)
-
+	json.NewEncoder(w).Encode(store.CollectedClients.Read())
 }

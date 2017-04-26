@@ -90,7 +90,7 @@ func testConsumeHelp(t *testing.T) {
 	// Consuming
 	var btData TestBT
 	recieverChan := make(chan []byte)
-	go w.ConsumeMessage(mockQ.Name(), recieverChan)
+	//go w.ConsumeMessage(mockQ.Name(), recieverChan)
 
 	for data := range recieverChan {
 		err := json.Unmarshal(data, &btData)

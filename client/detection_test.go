@@ -5,15 +5,17 @@ import (
 	"log"
 	"reflect"
 	"testing"
+
+	"github.com/paaff/PASO/store"
 )
 
 func TestFindAndDiscoverBTClass(t *testing.T) {
-	dataChannel := make(chan BlueData)
+	dataChannel := make(chan store.BlueData)
 	inqOutput := fmt.Sprint("Inquiring ...\n24:DA:9B:BB:EE:2B       clock offset: 0x51c4    class: 0x5a020c\n s")
 
 	go findAndDiscoverBTClass([]byte(inqOutput), dataChannel)
 
-	var phoneReceived BlueData
+	var phoneReceived store.BlueData
 	phoneReceived = <-dataChannel
 	fmt.Println(phoneReceived.Bdaddress)
 	fmt.Println(phoneReceived.Class)

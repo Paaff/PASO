@@ -7,12 +7,14 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/paaff/PASO/store"
 )
 
-type scanFunc func(dataChannel chan BlueData)
+type scanFunc func(dataChannel chan store.BlueData)
 
 // BT detection
-func detectBluetooth(dataChannel chan BlueData) {
+func detectBluetooth(dataChannel chan store.BlueData) {
 	t := time.NewTicker(15 * time.Second)
 	for {
 		scan(dataChannel)
@@ -20,7 +22,7 @@ func detectBluetooth(dataChannel chan BlueData) {
 	}
 }
 
-func scan(dataChannel chan BlueData) {
+func scan(dataChannel chan store.BlueData) {
 	exec.Command("hcitool", "scan")
 	out, err := exec.Command("hcitool", "inq").Output()
 	if err != nil {
@@ -32,8 +34,8 @@ func scan(dataChannel chan BlueData) {
 }
 
 // Trimming the output of Bluetooth inq command
-func findAndDiscoverBTClass(inq []byte, dataChannel chan BlueData) {
-	var phone BlueData
+func findAndDiscoverBTClass(inq []byte, dataChannel chan store.BlueData) {
+	var phone store.BlueData
 	// split string up for each
 	bluetoothList := strings.Split(string(inq), "\n")
 	for i, line := range bluetoothList {
@@ -44,7 +46,7 @@ func findAndDiscoverBTClass(inq []byte, dataChannel chan BlueData) {
 			// Check that we have the correct class (Phone)
 			if checkBTClass(bluetoothLine[5]) {
 
-				phone = BlueData{Name: "", Bdaddress: bluetoothLine[0], Class: bluetoothLine[5], Timestamp: time.Now().Format(time.RFC850)}
+				phone = store.BlueData{Name: "", Bdaddress: bluetoothLine[0], Class: bluetoothLine[5], Timestamp: time.Now().Format(time.RFC850)}
 				fmt.Printf("The bluetooth address %v, and the class is %v\n", bluetoothLine[0], bluetoothLine[5])
 				dataChannel <- phone
 			}
@@ -125,14 +127,6 @@ func detectWifi() {
 		fmt.Printf("%s", err)
 	}
 	fmt.Printf("%s", out)
-}
-
-// BlueData - Bluetooth data.
-type BlueData struct {
-	Name      string
-	Bdaddress string
-	Class     string
-	Timestamp string
 }
 
 // Wifi data
