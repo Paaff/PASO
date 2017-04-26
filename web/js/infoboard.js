@@ -12,7 +12,7 @@ Vue.component('client-item', {
           <li>Client: {{ client.Name }}</li>
           <li>Address: {{ client.Address }} </li>
           <li>Class: {{ client.Class }} </li>
-          <li>Last upated: {{ moment().from(client.Timestamp) }} </li>
+          <li>Last upated: {{ client.Timestap | lastUpdated }} </li>
         </ul>
       </section>
   </div>
@@ -24,6 +24,11 @@ var vm = new Vue({
   el: '#app',
   data: {
     clientList: []
+  },
+  filters: {
+    lastUpdated: function(value) {
+      return moment().from(value);
+    }
   }
 });
 
