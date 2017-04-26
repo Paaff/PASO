@@ -12,7 +12,7 @@ Vue.component('client-item', {
           <li>Client: {{ client.Name }}</li>
           <li>Address: {{ client.Address }} </li>
           <li>Class: {{ client.Class }} </li>
-          <li>Timestamp: {{client.Timestamp }} </li>
+          <li>Last upated: {{ moment().from(client.Timestamp) }} </li>
         </ul>
       </section>
   </div>
@@ -32,5 +32,6 @@ setInterval(function() {
     return response.json();
   }).then(function(serverList) {
     vm.clientList = serverList;
+
   });
 }, 3000);
