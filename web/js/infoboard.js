@@ -12,7 +12,7 @@ Vue.component('client-item', {
           <li>Client: {{ client.Name }}</li>
           <li>Address: {{ client.Address }} </li>
           <li>Class: {{ client.Class }} </li>
-          <li>Last upated: {{ client.Timestap }} </li>
+          <li>Last updated: {{ client.Timestamp }} </li>
         </ul>
       </section>
   </div>
