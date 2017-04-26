@@ -13,6 +13,7 @@ import (
 func Start(conf *config.Config) {
 	// Initialize the local DB of allowed clients.
 	initPolicy()
+
 	// Start connection with RabitMQ server.
 	w, err := wabbit.InitWabbitConsumer(conf.Username, conf.Pass, conf.Address, conf.Port, "bluetoothqueue", conf.ExchangeName, conf.ExchangeType, conf.RoutingKey)
 	if err != nil {
