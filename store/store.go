@@ -13,6 +13,11 @@ type ClientDataMap struct {
 	items map[string]BlueData
 }
 
+// NewCollectedClientsMap initializes the map
+func (cdm *ClientDataMap) NewCollectedClientsMap() {
+	cdm.items = make(map[string]BlueData)
+}
+
 // Set function will acquire a lock on the slice, append and release the lock.
 func (cdm *ClientDataMap) Set(key string, value BlueData) {
 	cdm.Lock()
