@@ -1,5 +1,5 @@
 // Bluetooth Client Component
-Vue.component('client-item', {
+var ClientItem = {
   // Template
   props: ['client'],
   template: `
@@ -17,13 +17,16 @@ Vue.component('client-item', {
       </section>
   </div>
   `
-});
+};
 
 // Main Vue
 var vm = new Vue({
   el: '#app',
   data: {
     clientList: []
+  },
+  components: {
+    'client-item': ClientItem
   },
   filters: {
     updated: function (value) {
