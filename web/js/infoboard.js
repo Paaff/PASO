@@ -5,14 +5,14 @@ Vue.component('client-item', {
   template: `
   <div class="panel">
       <header>
-      <h5> {{ client.title }} </h5>
+      <h5> {{ client.Title }} </h5>
       </header>
       <section>
         <ul>
-          <li>Client: {{ client.name }}</li>
-          <li>Address: {{ client.address }} </li>
-          <li>Class: {{ client.class }} </li>
-          <li>Timestamp: {{client.timestamp }} </li>
+          <li>Client: {{ client.Name }}</li>
+          <li>Address: {{ client.Address }} </li>
+          <li>Class: {{ client.Class }} </li>
+          <li>Timestamp: {{client.Timestamp }} </li>
         </ul>
       </section>
   </div>
