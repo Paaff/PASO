@@ -105,6 +105,8 @@ func (p *ProjectsList) Add(elem Project) {
 
 // Remove - Selfexplanatory
 func (p *ProjectsList) Remove(elem Project) {
+
+	// Get the index of the desired element
 	var elemI int
 	for i := 0; i < len(p.elements); i++ {
 		if reflect.DeepEqual(p.elements[i], elem) {
@@ -112,8 +114,15 @@ func (p *ProjectsList) Remove(elem Project) {
 			break
 		}
 	}
+
+	// As we dont care about ordering we can simply take the last element in the slice and replace
+	// the desired element.
 	p.elements[elemI] = p.elements[len(p.elements)-1]
 	p.elements = p.elements[:len(p.elements)-1]
+}
+
+func (p *ProjectsList) GetValidProjects() {
+
 }
 
 // Project is a struct containing the content of a project (displayed) and a list of the required permissions to be fulfilled before this can be displayed.
