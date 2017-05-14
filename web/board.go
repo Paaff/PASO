@@ -29,6 +29,7 @@ func RetrieveBTData(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(store.CollectedBlueData.GetAsSlice())
 }
 
+// RetrieveProjects provides the valid projects based on the currently discovered valid clients
 func RetrieveProjects(w http.ResponseWriter, r *http.Request) {
-
+	json.NewEncoder(w).Encode(store.Projects.GetValidProjects())
 }

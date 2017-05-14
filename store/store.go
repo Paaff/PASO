@@ -85,6 +85,15 @@ type Client struct {
 	Permissions []string
 }
 
+func (c *Client) ContainsPerm(value string) bool {
+	for _, perm := range c.Permissions {
+		if value == perm {
+			return true
+		}
+	}
+	return false
+}
+
 // Projects holds a list of Project structs with the purpose of demoing and testing.
 var Projects ProjectsList
 
@@ -114,15 +123,36 @@ func (p *ProjectsList) Remove(elem Project) {
 			break
 		}
 	}
-
 	// As we dont care about ordering we can simply take the last element in the slice and replace
 	// the desired element.
 	p.elements[elemI] = p.elements[len(p.elements)-1]
 	p.elements = p.elements[:len(p.elements)-1]
 }
 
-func (p *ProjectsList) GetValidProjects() {
+// GetValidProjects provides the projects in which all the clients are fulfilling the permissions
+func (p *ProjectsList) GetValidProjects() []Project {
+	validProjects := make([]Project, 0)
+	currentDetected := CollectedBlueData.GetAsSlice()
+	for _, project := range p.elements {
+		ok := everyClientHasPerms(project, currentDetected)
+		if ok {
+			validProjects = append(validProjects, project)
+		}
+	}
+	return validProjects
+}
 
+func everyClientHasPerms(project Project, currDetected []BlueData) bool {
+	for _, perm := range project.RequiredPermissions {
+		for _, blueData := range currDetected {
+			client, okClient := ValidClientsMap.Get(blueData.Address)
+			okPerm := client.ContainsPerm(perm)
+			if !okClient || !okPerm {
+				return false
+			}
+		}
+	}
+	return true
 }
 
 // Project is a struct containing the content of a project (displayed) and a list of the required permissions to be fulfilled before this can be displayed.
