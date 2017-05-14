@@ -133,6 +133,10 @@ func (p *ProjectsList) Remove(elem Project) {
 func (p *ProjectsList) GetValidProjects() []Project {
 	validProjects := make([]Project, 0)
 	currentDetected := CollectedBlueData.GetAsSlice()
+	if len(currentDetected) == 0 {
+		return validProjects
+	}
+
 	for _, project := range p.elements {
 		ok := everyClientHasPerms(project, currentDetected)
 		if ok {

@@ -26,7 +26,7 @@ Vue.component('project-item', {
       </header>
       <section>
         <ul>
-          <li>Content: project.Content </li>
+          <li>Content: {{ project.Content }} </li>
           <li>Members:
             <div v-for="item in project.Members">
               <div> {{ item }} </div>
