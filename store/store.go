@@ -155,15 +155,18 @@ func (p *ProjectsList) GetValidProjects() []Project {
 }
 
 func permsFulfilled(project Project, currDetected []BlueData) bool {
-	var ok bool
 	for _, perm := range project.RequiredPermissions {
 		if perm.PermType == "Open" {
-			ok = singleFulfilled(perm, currDetected)
+			if ok := singleFulfilled(perm, currDetected); ok != true {
+				return false
+			}
 		} else if perm.PermType == "View" {
-			ok = allFulfilled(perm, currDetected)
+			if ok := allFulfilled(perm, currDetected); ok != true {
+				return false
+			}
 		}
 	}
-	return ok
+	return false
 }
 
 func singleFulfilled(perm Permission, currDetected []BlueData) bool {
