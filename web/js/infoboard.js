@@ -4,9 +4,6 @@ Vue.component('client-item', {
   props: ['client'],
   template: `
   <div class="panel">
-      <header>
-      <h5> {{ client.Title }} </h5>
-      </header>
       <section>
         <ul>
           <li>Client: {{ client.Name }}</li>
@@ -19,18 +16,59 @@ Vue.component('client-item', {
   `
 });
 
+// Project Component
+Vue.component('project-item', {
+  // Template
+  props: ['project'],
+  template: `
+  <div class="panel">
+      <header>
+      <h5> {{ project.ProjectName }} </h5>
+      </header>
+      <section>
+        <ul>
+          <li>Content: {{ project.Content }}</li>
+          <li>Members:
+            <div v-for="item in {{ project.Members }}">
+              <li> item </li>
+            </div>
+          </li>
+
+          <li>Required Permissions:
+            <div v-for="item in {{ project.RequiredPermissions }}">
+              <li> item </li>
+            </div>
+          </li>
+
+        </ul>
+      </section>
+  </div>
+  `
+});
+
+
+
 // Main Vue
 var vm = new Vue({
   el: '#app',
   data: {
+    projectList: [],
     clientList: []
   }
 });
 
 setInterval(function() {
+  fetch('http://192.168.0.109:3000/api/projects').then(function(response) {
+    return response.json();
+  }).then(function(projectListFromServer) {
+    vm.projectList = projectListFromServer;
+  });
+}, 3000);
+
+setInterval(function() {
   fetch('http://192.168.0.109:3000/api/data').then(function(response) {
     return response.json();
-  }).then(function(serverList) {
-    vm.clientList = serverList;
+  }).then(function(clientListFromServer) {
+    vm.clientList = clientListFromServer;
   });
 }, 3000);
