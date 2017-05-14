@@ -75,7 +75,7 @@ func (w *Wabbit) ConsumeMessage(queueName string) {
 		}
 
 		client, ok := store.ValidClientsMap.Get(recievedBlueData.Address)
-		fmt.Printf("Valid client name is %s, status is %v", client.Name, ok)
+		fmt.Printf("Valid client name is %s, status is %v\n", client.Name, ok)
 		if ok {
 			store.CollectedBlueData.Set(recievedBlueData.Address, recievedBlueData)
 		}

@@ -79,15 +79,22 @@ func (vm *ValidClients) Get(key string) (Client, bool) {
 	return value, ok
 }
 
+// Permission contains the permission and the type of permission "View" or "Open"
+type Permission struct {
+	Perm     string
+	PermType string
+}
+
 // Client is a struct for the predetermined users in the system.
 type Client struct {
 	Name        string
-	Permissions []string
+	Permissions []Permission
 }
 
-func (c *Client) ContainsPerm(value string) bool {
-	for _, perm := range c.Permissions {
-		if value == perm {
+// ContainsPerm will check the clients permissions list and return true if a matching permission is found.
+func (c *Client) ContainsPerm(perm Permission) bool {
+	for _, p := range c.Permissions {
+		if reflect.DeepEqual(p, perm) {
 			return true
 		}
 	}
@@ -132,13 +139,14 @@ func (p *ProjectsList) Remove(elem Project) {
 // GetValidProjects provides the projects in which all the clients are fulfilling the permissions
 func (p *ProjectsList) GetValidProjects() []Project {
 	validProjects := make([]Project, 0)
+
 	currentDetected := CollectedBlueData.GetAsSlice()
 	if len(currentDetected) == 0 {
 		return validProjects
 	}
 
 	for _, project := range p.elements {
-		ok := everyClientHasPerms(project, currentDetected)
+		ok := permsFulfilled(project, currentDetected)
 		if ok {
 			validProjects = append(validProjects, project)
 		}
@@ -146,14 +154,35 @@ func (p *ProjectsList) GetValidProjects() []Project {
 	return validProjects
 }
 
-func everyClientHasPerms(project Project, currDetected []BlueData) bool {
+func permsFulfilled(project Project, currDetected []BlueData) bool {
+	var ok bool
 	for _, perm := range project.RequiredPermissions {
-		for _, blueData := range currDetected {
-			client, okClient := ValidClientsMap.Get(blueData.Address)
-			okPerm := client.ContainsPerm(perm)
-			if !okClient || !okPerm {
-				return false
-			}
+		if perm.PermType == "Open" {
+			ok = singleFulfilled(perm, currDetected)
+		} else if perm.PermType == "View" {
+			ok = allFulfilled(perm, currDetected)
+		}
+	}
+	return ok
+}
+
+func singleFulfilled(perm Permission, currDetected []BlueData) bool {
+	for _, blueData := range currDetected {
+		client, okClient := ValidClientsMap.Get(blueData.Address)
+		okPerm := client.ContainsPerm(perm)
+		if okClient && okPerm {
+			return true
+		}
+	}
+	return false
+}
+
+func allFulfilled(perm Permission, currDetected []BlueData) bool {
+	for _, blueData := range currDetected {
+		client, okClient := ValidClientsMap.Get(blueData.Address)
+		okPerm := client.ContainsPerm(perm)
+		if okClient && !okPerm {
+			return false
 		}
 	}
 	return true
@@ -164,5 +193,5 @@ type Project struct {
 	ProjectName         string
 	Content             string
 	Members             []string
-	RequiredPermissions []string
+	RequiredPermissions []Permission
 }
