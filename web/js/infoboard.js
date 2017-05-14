@@ -6,7 +6,6 @@ Vue.component('client-item', {
   <div class="panel">
       <section>
         <ul>
-          <li>Client: {{ client.Name }}</li>
           <li>Address: {{ client.Address }} </li>
           <li>Class: {{ client.Class }} </li>
           <li>Last updated: {{ client.Timestamp }} </li>
@@ -27,19 +26,17 @@ Vue.component('project-item', {
       </header>
       <section>
         <ul>
-          <li>Content: {{ project.Content }}</li>
+          <li>Content: project.Content </li>
           <li>Members:
-            <div v-for="item in {{ project.Members }}">
-              <li> item </li>
+            <div v-for="item in project.Members">
+              <div> {{ item }} </div>
             </div>
           </li>
-
           <li>Required Permissions:
-            <div v-for="item in {{ project.RequiredPermissions }}">
-              <li> item </li>
+            <div v-for="item in project.RequiredPermissions">
+              <div> {{ item }} </div>
             </div>
           </li>
-
         </ul>
       </section>
   </div>
