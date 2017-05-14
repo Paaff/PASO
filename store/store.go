@@ -160,13 +160,14 @@ func permsFulfilled(project Project, currDetected []BlueData) bool {
 			if ok := singleFulfilled(perm, currDetected); ok != true {
 				return false
 			}
-		} else if perm.PermType == "View" {
+		}
+		if perm.PermType == "View" {
 			if ok := allFulfilled(perm, currDetected); ok != true {
 				return false
 			}
 		}
 	}
-	return false
+	return true
 }
 
 func singleFulfilled(perm Permission, currDetected []BlueData) bool {
