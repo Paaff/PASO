@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/paaff/PASO/config"
+	"github.com/paaff/PASO/store"
 	"github.com/paaff/PASO/wabbit"
 	"github.com/paaff/PASO/web"
 )
@@ -12,7 +13,7 @@ import (
 // Start - Global function to start the server.
 func Start(conf *config.Config) {
 	// Initialize the local DB of allowed clients.
-	initPolicy()
+	store.InitDB()
 
 	// Start connection with RabitMQ server.
 	w, err := wabbit.InitWabbitConsumer(conf.Username, conf.Pass, conf.Address, conf.Port, "bluetoothqueue", conf.ExchangeName, conf.ExchangeType, conf.RoutingKey)

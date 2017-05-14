@@ -1,11 +1,12 @@
 package store
 
 import (
+	"reflect"
 	"sync"
 )
 
-// CollectedClients holds all the current clients detected
-var CollectedClients ClientDataMap
+// CollectedBlueData holds all the current clients detected
+var CollectedBlueData ClientDataMap
 
 // ClientDataMap is a Global slice designed to hold the Bluedata items.
 type ClientDataMap struct {
@@ -48,7 +49,6 @@ func (cdm *ClientDataMap) GetAsSlice() []BlueData {
 
 // BlueData - Bluetooth data.
 type BlueData struct {
-	Name      string
 	Address   string
 	Class     string
 	Timestamp string
@@ -60,21 +60,66 @@ var ValidClientsMap ValidClients
 // ValidClients is a map that holds the predetermined information about which clients (names of them)
 // and their respective BT Address.
 type ValidClients struct {
-	items map[string]string
+	items map[string]Client
 }
 
 // NewValidClientsMap initializes the map
 func (vm *ValidClients) NewValidClientsMap() {
-	vm.items = make(map[string]string)
+	vm.items = make(map[string]Client)
 }
 
 // Set - Selfexplanatory
-func (vm *ValidClients) Set(key string, value string) {
+func (vm *ValidClients) Set(key string, value Client) {
 	vm.items[key] = value
 }
 
 // Get - Selfexplanatory
-func (vm *ValidClients) Get(key string) (string, bool) {
+func (vm *ValidClients) Get(key string) (Client, bool) {
 	value, ok := vm.items[key]
 	return value, ok
+}
+
+// Client is a struct for the predetermined users in the system.
+type Client struct {
+	Name        string
+	Permissions []string
+}
+
+// Projects holds a list of Project structs with the purpose of demoing and testing.
+var Projects ProjectsList
+
+// ProjectsList is a wrapper for the slice of Project.
+type ProjectsList struct {
+	elements []Project
+}
+
+// NewProjectsList creates a new slice of projects with length 0.
+func (p *ProjectsList) NewProjectsList() {
+	p.elements = make([]Project, 0)
+}
+
+// Add - Selfexplanatory
+func (p *ProjectsList) Add(elem Project) {
+	p.elements = append(p.elements, elem)
+}
+
+// Remove - Selfexplanatory
+func (p *ProjectsList) Remove(elem Project) {
+	var elemI int
+	for i := 0; i < len(p.elements); i++ {
+		if reflect.DeepEqual(p.elements[i], elem) {
+			elemI = i
+			break
+		}
+	}
+	p.elements[elemI] = p.elements[len(p.elements)-1]
+	p.elements = p.elements[:len(p.elements)-1]
+}
+
+// Project is a struct containing the content of a project (displayed) and a list of the required permissions to be fulfilled before this can be displayed.
+type Project struct {
+	ProjectName         string
+	Content             string
+	Members             []string
+	RequiredPermissions []string
 }

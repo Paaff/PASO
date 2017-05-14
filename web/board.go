@@ -16,6 +16,7 @@ func InitBoard() {
 	mux := http.NewServeMux()
 	http.Handle("/api/", http.StripPrefix("/api", mux))
 	mux.HandleFunc("/data", RetrieveBTData)
+	mux.HandleFunc("/projects", RetrieveProjects)
 
 	err := http.ListenAndServe(":3000", nil)
 	if err != nil {
@@ -25,5 +26,9 @@ func InitBoard() {
 
 // RetrieveBTData will provide bluetooth data gathered from the system.
 func RetrieveBTData(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(store.CollectedClients.GetAsSlice())
+	json.NewEncoder(w).Encode(store.CollectedBlueData.GetAsSlice())
+}
+
+func RetrieveProjects(w http.ResponseWriter, r *http.Request) {
+
 }

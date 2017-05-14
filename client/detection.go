@@ -44,11 +44,14 @@ func findAndDiscoverBTClass(inq []byte, dataChannel chan store.BlueData) {
 		if i > 0 && i != len(bluetoothList)-1 {
 			bluetoothLine := strings.Fields(line)
 			// Check that we have the correct class (Phone)
-			name, ok := checkBTClass(bluetoothLine[5])
+			className, ok := checkBTClass(bluetoothLine[5])
 			if ok {
-				phone = store.BlueData{Name: "", Address: bluetoothLine[0], Class: name, Timestamp: time.Now().Format(time.RFC1123Z)}
+				phone = store.BlueData{Address: bluetoothLine[0], Class: className, Timestamp: time.Now().Format(time.RFC1123Z)}
 				fmt.Printf("The bluetooth address %v, and the class is %v\n", bluetoothLine[0], bluetoothLine[5])
 				dataChannel <- phone
+			} else {
+				// phone = store.BlueData{Name: className, Address: bluetoothLine[0], Class: className, Timestamp: time.Now().Format(time.RFC1123Z)}
+				// dataChannel <- phone
 			}
 
 		}
@@ -72,7 +75,7 @@ func checkBTClass(hexClass string) (string, bool) {
 	} else if isMajorDeviceClassPhone(classBits) && !isMinorDeviceClassSmartPhone(classBits) {
 		return "Phone", true
 	} else {
-		return "", false
+		return "Unknown", false
 	}
 }
 
@@ -124,18 +127,4 @@ func isMinorDeviceClassSmartPhone(classBits []uint64) bool {
 	*/
 	return isFlipped(classBits, 2) && isFlipped(classBits, 3) && !isFlipped(classBits, 4) &&
 		!isFlipped(classBits, 5) && !isFlipped(classBits, 6) && !isFlipped(classBits, 7)
-}
-
-// Wifi detection
-func detectWifi() {
-	out, err := exec.Command("arp-scan", "-l").Output()
-	if err != nil {
-		fmt.Printf("%s", err)
-	}
-	fmt.Printf("%s", out)
-}
-
-// Wifi data
-type wifiData struct {
-	mac string
 }

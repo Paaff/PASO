@@ -68,17 +68,16 @@ func (w *Wabbit) ConsumeMessage(queueName string) {
 		fmt.Printf("Queue Consume: %s", err)
 	}
 
-	var recievedClient store.BlueData
+	var recievedBlueData store.BlueData
 	for d := range msgs {
-		if err = json.Unmarshal(d.Body(), &recievedClient); err != nil {
+		if err = json.Unmarshal(d.Body(), &recievedBlueData); err != nil {
 			fmt.Println("Unmarshalling went wrong")
 		}
 
-		name, ok := store.ValidClientsMap.Get(recievedClient.Address)
-		fmt.Printf("Valid client name is %s, status is %v and recieved name was %s\n", name, ok, recievedClient.Name)
+		client, ok := store.ValidClientsMap.Get(recievedBlueData.Address)
+		fmt.Printf("Valid client name is %s, status is %v", client.Name, ok)
 		if ok {
-			recievedClient.Name = name
-			store.CollectedClients.Set(recievedClient.Address, recievedClient)
+			store.CollectedBlueData.Set(recievedBlueData.Address, recievedBlueData)
 		}
 
 	}
