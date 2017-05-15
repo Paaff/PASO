@@ -5,78 +5,12 @@ import (
 	"sync"
 )
 
-// CollectedBlueData holds all the current clients detected
-var CollectedBlueData ClientDataMap
-
-// ClientDataMap is a Global slice designed to hold the Bluedata items.
-type ClientDataMap struct {
-	sync.RWMutex
-	items map[string]BlueData
-}
-
-// NewCollectedClientsMap initializes the map
-func (cdm *ClientDataMap) NewCollectedClientsMap() {
-	cdm.items = make(map[string]BlueData)
-}
-
-// Set function will acquire a lock on the slice, append and release the lock.
-func (cdm *ClientDataMap) Set(key string, value BlueData) {
-	cdm.Lock()
-	defer cdm.Unlock()
-	cdm.items[key] = value
-
-}
-
-// Get function will acquire a read lock and return the slice
-func (cdm *ClientDataMap) Get(key string) (BlueData, bool) {
-	cdm.RLock()
-	defer cdm.RUnlock()
-	value, ok := cdm.items[key]
-	return value, ok
-}
-
-// GetAsSlice will pull each value from the map and return it as a slice of BlueData
-func (cdm *ClientDataMap) GetAsSlice() []BlueData {
-	var result []BlueData
-	cdm.RLock()
-	defer cdm.RUnlock()
-
-	for _, v := range cdm.items {
-		result = append(result, v)
-	}
-	return result
-}
-
-// BlueData - Bluetooth data.
-type BlueData struct {
-	Address   string
-	Class     string
-	Timestamp string
-}
-
-// ValidClientsMap is the global map to view the valid clients
-var ValidClientsMap ValidClients
-
-// ValidClients is a map that holds the predetermined information about which clients (names of them)
-// and their respective BT Address.
-type ValidClients struct {
-	items map[string]Client
-}
-
-// NewValidClientsMap initializes the map
-func (vm *ValidClients) NewValidClientsMap() {
-	vm.items = make(map[string]Client)
-}
-
-// Set - Selfexplanatory
-func (vm *ValidClients) Set(key string, value Client) {
-	vm.items[key] = value
-}
-
-// Get - Selfexplanatory
-func (vm *ValidClients) Get(key string) (Client, bool) {
-	value, ok := vm.items[key]
-	return value, ok
+// Project is a struct containing the content of a project (displayed) and a list of the required permissions to be fulfilled before this can be displayed.
+type Project struct {
+	ProjectName         string
+	Content             string
+	Members             []string
+	RequiredPermissions []Permission
 }
 
 // Permission contains the permission and the type of permission "View" or "Open"
@@ -91,6 +25,88 @@ type Client struct {
 	Permissions []Permission
 }
 
+// ProjectsList is a wrapper for the slice of Project.
+type ProjectsList struct {
+	elements []Project
+}
+
+// BlueData - Bluetooth data.
+type BlueData struct {
+	Address   string
+	Class     string
+	Timestamp string
+}
+
+// ClientsMap is a map that holds the predetermined information about which clients (names of them)
+// and their respective BT Address.
+type ClientsMap struct {
+	items map[string]Client
+}
+
+// BlueDataMap is a Global slice designed to hold the Bluedata items.
+type BlueDataMap struct {
+	sync.RWMutex
+	items map[string]BlueData
+}
+
+// Projects holds a list of Project structs with the purpose of demoing and testing.
+var Projects ProjectsList
+
+// ValidClientsMap is the global map to view the valid clients
+var ValidClientsMap ClientsMap
+
+// CollectedBlueData holds all the current clients detected
+var CollectedBlueData BlueDataMap
+
+// NewBlueDataMap initializes the map
+func (cdm *BlueDataMap) NewBlueDataMap() {
+	cdm.items = make(map[string]BlueData)
+}
+
+// Set function will acquire a lock on the slice, append and release the lock.
+func (cdm *BlueDataMap) Set(key string, value BlueData) {
+	cdm.Lock()
+	defer cdm.Unlock()
+	cdm.items[key] = value
+
+}
+
+// Get function will acquire a read lock and return the slice
+func (cdm *BlueDataMap) Get(key string) (BlueData, bool) {
+	cdm.RLock()
+	defer cdm.RUnlock()
+	value, ok := cdm.items[key]
+	return value, ok
+}
+
+// GetAsSlice will pull each value from the map and return it as a slice of BlueData
+func (cdm *BlueDataMap) GetAsSlice() []BlueData {
+	var result []BlueData
+	cdm.RLock()
+	defer cdm.RUnlock()
+
+	for _, v := range cdm.items {
+		result = append(result, v)
+	}
+	return result
+}
+
+// NewClientsMap initializes the map
+func (vm *ClientsMap) NewClientsMap() {
+	vm.items = make(map[string]Client)
+}
+
+// Set - Selfexplanatory
+func (vm *ClientsMap) Set(key string, value Client) {
+	vm.items[key] = value
+}
+
+// Get - Selfexplanatory
+func (vm *ClientsMap) Get(key string) (Client, bool) {
+	value, ok := vm.items[key]
+	return value, ok
+}
+
 // ContainsPerm will check the clients permissions list and return true if a matching permission is found.
 func (c *Client) ContainsPerm(perm Permission) bool {
 	for _, p := range c.Permissions {
@@ -99,14 +115,6 @@ func (c *Client) ContainsPerm(perm Permission) bool {
 		}
 	}
 	return false
-}
-
-// Projects holds a list of Project structs with the purpose of demoing and testing.
-var Projects ProjectsList
-
-// ProjectsList is a wrapper for the slice of Project.
-type ProjectsList struct {
-	elements []Project
 }
 
 // NewProjectsList creates a new slice of projects with length 0.
@@ -190,12 +198,4 @@ func allFulfilled(perm Permission, currDetected []BlueData) bool {
 		}
 	}
 	return true
-}
-
-// Project is a struct containing the content of a project (displayed) and a list of the required permissions to be fulfilled before this can be displayed.
-type Project struct {
-	ProjectName         string
-	Content             string
-	Members             []string
-	RequiredPermissions []Permission
 }

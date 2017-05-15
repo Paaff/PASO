@@ -2,12 +2,12 @@ package store
 
 // InitDB - Initializes the Demo Database.
 func InitDB() {
-	ValidClientsMap = ValidClients{}
-	ValidClientsMap.NewValidClientsMap()
+	ValidClientsMap = ClientsMap{}
+	ValidClientsMap.NewClientsMap()
 	populateValidClients()
 
-	CollectedBlueData = ClientDataMap{}
-	CollectedBlueData.NewCollectedClientsMap()
+	CollectedBlueData = BlueDataMap{}
+	CollectedBlueData.NewBlueDataMap()
 
 	Projects = ProjectsList{}
 	Projects.NewProjectsList()
