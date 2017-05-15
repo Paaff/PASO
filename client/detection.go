@@ -15,7 +15,7 @@ type scanFunc func(dataChannel chan store.BlueData)
 
 // BT detection
 func detectBluetooth(dataChannel chan store.BlueData) {
-	t := time.NewTicker(15 * time.Second)
+	t := time.NewTicker(3 * time.Second)
 	for {
 		scan(dataChannel)
 		<-t.C
@@ -23,7 +23,17 @@ func detectBluetooth(dataChannel chan store.BlueData) {
 }
 
 func scan(dataChannel chan store.BlueData) {
-	exec.Command("hcitool", "scan")
+	cmd := exec.Command("hcitool", "scan")
+	cmdErr := cmd.Start()
+	if cmdErr != nil {
+		log.Fatal(cmdErr)
+	}
+	fmt.Printf("Scanning...")
+	cmdErr = cmd.Wait()
+	if cmdErr != nil {
+		log.Fatal(cmdErr)
+	}
+
 	out, err := exec.Command("hcitool", "inq").Output()
 	if err != nil {
 		fmt.Printf("%s", err)
@@ -50,8 +60,8 @@ func findAndDiscoverBTClass(inq []byte, dataChannel chan store.BlueData) {
 				fmt.Printf("The bluetooth address %v, and the class is %v\n", bluetoothLine[0], bluetoothLine[5])
 				dataChannel <- phone
 			} else {
-				// phone = store.BlueData{Name: className, Address: bluetoothLine[0], Class: className, Timestamp: time.Now().Format(time.RFC1123Z)}
-				// dataChannel <- phone
+				phone = store.BlueData{Address: bluetoothLine[0], Class: className, Timestamp: time.Now()}
+				dataChannel <- phone
 			}
 
 		}
