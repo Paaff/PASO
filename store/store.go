@@ -117,31 +117,42 @@ func (c *Client) ContainsPerm(perm Permission) bool {
 	return false
 }
 
-// NewProjectsList creates a new slice of projects with length 0.
-func (p *ProjectsList) NewProjectsList() {
-	p.elements = make([]Project, 0)
-}
-
 // Add - Selfexplanatory
 func (p *ProjectsList) Add(elem Project) {
 	p.elements = append(p.elements, elem)
 }
 
-// Remove - Selfexplanatory
-func (p *ProjectsList) Remove(elem Project) {
+// Contains - Selfexplanatory
+func (p *ProjectsList) Contains(project Project) bool {
+	for _, v := range p.elements {
+		if reflect.DeepEqual(v, project) {
+			return true
+		}
+	}
+	return false
+}
 
+// Remove - Selfexplanatory
+func (p *ProjectsList) Remove(elem Project) bool {
+	var found bool
 	// Get the index of the desired element
 	var elemI int
 	for i := 0; i < len(p.elements); i++ {
 		if reflect.DeepEqual(p.elements[i], elem) {
 			elemI = i
+			found = true
 			break
 		}
 	}
-	// As we dont care about ordering we can simply take the last element in the slice and replace
-	// the desired element.
-	p.elements[elemI] = p.elements[len(p.elements)-1]
-	p.elements = p.elements[:len(p.elements)-1]
+
+	if found {
+		// As we dont care about ordering we can simply take the last element in the slice and replace
+		// the desired element.
+		p.elements[elemI] = p.elements[len(p.elements)-1]
+		p.elements = p.elements[:len(p.elements)-1]
+		return found
+	}
+	return found
 }
 
 // GetValidProjects provides the projects in which all the clients are fulfilling the permissions

@@ -10,7 +10,6 @@ func InitDB() {
 	CollectedBlueData.NewBlueDataMap()
 
 	Projects = ProjectsList{}
-	Projects.NewProjectsList()
 	populateProjects()
 }
 
@@ -22,7 +21,10 @@ func populateValidClients() {
 			Permission{Perm: "ViewC", PermType: "View"},
 			Permission{Perm: "OpenC", PermType: "Open"}}})
 
-	ValidClientsMap.Set("20:7D:74:0B:B6:BB", Client{"Alberto Lafuente", []Permission{Permission{}}})
+	ValidClientsMap.Set("20:7D:74:0B:B6:BB",
+		Client{
+			"Alberto Lafuente",
+			[]Permission{Permission{}}})
 
 	ValidClientsMap.Set("54:9B:12:D2:09:4C",
 		Client{
