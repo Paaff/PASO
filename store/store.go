@@ -3,6 +3,7 @@ package store
 import (
 	"reflect"
 	"sync"
+	"time"
 )
 
 // Project is a struct containing the content of a project (displayed) and a list of the required permissions to be fulfilled before this can be displayed.
@@ -34,7 +35,7 @@ type ProjectsList struct {
 type BlueData struct {
 	Address   string
 	Class     string
-	Timestamp string
+	Timestamp time.Time
 }
 
 // ClientsMap is a map that holds the predetermined information about which clients (names of them)
@@ -68,7 +69,6 @@ func (cdm *BlueDataMap) Set(key string, value BlueData) {
 	cdm.Lock()
 	defer cdm.Unlock()
 	cdm.items[key] = value
-
 }
 
 // Get function will acquire a read lock and return the slice
@@ -81,12 +81,18 @@ func (cdm *BlueDataMap) Get(key string) (BlueData, bool) {
 
 // GetAsSlice will pull each value from the map and return it as a slice of BlueData
 func (cdm *BlueDataMap) GetAsSlice() []BlueData {
+	maxTimeDuration := time.Minute
 	var result []BlueData
 	cdm.RLock()
 	defer cdm.RUnlock()
+	timeNow := time.Now()
 
 	for _, v := range cdm.items {
-		result = append(result, v)
+		timeWhenDetected := v.Timestamp
+		duration := timeWhenDetected.Sub(timeNow)
+		if duration <= maxTimeDuration {
+			result = append(result, v)
+		}
 	}
 	return result
 }

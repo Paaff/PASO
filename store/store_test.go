@@ -3,6 +3,7 @@ package store
 import (
 	"reflect"
 	"testing"
+	"time"
 )
 
 /*******************
@@ -31,9 +32,9 @@ func TestSetBlueDataMap(t *testing.T) {
 		t.Errorf("There should be no key-value pair with key test in the map. Map: %v, value: %v", testingMap.items, v)
 	}
 
-	testingMap.Set("test", BlueData{"Address", "Class", "Time"})
+	testingMap.Set("test", BlueData{"Address", "Class", time.Now()})
 	v, ok = testingMap.Get("test")
-	if ok != true && reflect.DeepEqual(v, BlueData{"Address", "Class", "Time"}) {
+	if ok != true && reflect.DeepEqual(v, BlueData{"Address", "Class", time.Now()}) {
 		t.Errorf("There should've been a key, bool: %v, and a value: %v in the map: %v", ok, v, testingMap.items)
 	}
 
@@ -48,9 +49,9 @@ func TestBlueDataMapGetAsSlice(t *testing.T) {
 		t.Errorf("The slice should be empty, slice: %v", slice)
 	}
 
-	testingMap.Set("test1", BlueData{"Address1", "Class1", "Time1"})
-	testingMap.Set("test2", BlueData{"Address2", "Class2", "Time2"})
-	testingMap.Set("test3", BlueData{"Address3", "Class3", "Time3"})
+	testingMap.Set("test1", BlueData{"Address1", "Class1", time.Now()})
+	testingMap.Set("test2", BlueData{"Address2", "Class2", time.Now()})
+	testingMap.Set("test3", BlueData{"Address3", "Class3", time.Now()})
 
 	slice = testingMap.GetAsSlice()
 	if len(slice) != 3 {
@@ -85,7 +86,7 @@ func TestSetAndGetClientsMap(t *testing.T) {
 
 	testingMap.Set("test", Client{"Name", []Permission{Permission{}}})
 	v, ok = testingMap.Get("test")
-	if ok != true && reflect.DeepEqual(v, BlueData{"Address", "Class", "Time"}) {
+	if ok != true && reflect.DeepEqual(v, BlueData{"Address", "Class", time.Now()}) {
 		t.Errorf("There should've been a key, bool: %v, and a value: %v in the map: %v", ok, v, testingMap.items)
 	}
 }
@@ -194,7 +195,7 @@ func TestGetValidProjects(t *testing.T) {
 	expected := []Project{projectA, projectC}
 
 	// Adding BlueData
-	CollectedBlueData.Set("24:DA:9B:BB:EE:2B", BlueData{"24:DA:9B:BB:EE:2B", "Smartphone", "Time 12345"})
+	CollectedBlueData.Set("24:DA:9B:BB:EE:2B", BlueData{"24:DA:9B:BB:EE:2B", "Smartphone", time.Now()})
 
 	actual := Projects.GetValidProjects()
 
@@ -206,7 +207,7 @@ func TestGetValidProjects(t *testing.T) {
 
 	expected = []Project{projectA}
 
-	CollectedBlueData.Set("54:9B:12:D2:09:4C", BlueData{"54:9B:12:D2:09:4C", "Smartphone", "Time Mathias"})
+	CollectedBlueData.Set("54:9B:12:D2:09:4C", BlueData{"54:9B:12:D2:09:4C", "Smartphone", time.Now()})
 
 	actual = Projects.GetValidProjects()
 
@@ -235,7 +236,7 @@ func TestSingleFulFilled(t *testing.T) {
 		t.Errorf("Should not return true.\nCurrDetected should be empty: %v.", currDetected)
 	}
 
-	d1 := BlueData{"24:DA:9B:BB:EE:2B", "SmartphoneClass", "Time is now"}
+	d1 := BlueData{"24:DA:9B:BB:EE:2B", "SmartphoneClass", time.Now()}
 	CollectedBlueData.Set("24:DA:9B:BB:EE:2B", d1)
 	currDetected = CollectedBlueData.GetAsSlice()
 
@@ -254,7 +255,7 @@ func TestSingleFulFilled(t *testing.T) {
 		t.Errorf("The perm should be matched with the currDetected, perm: %v, perm: %v", permFailOpen, permFailView)
 	}
 
-	d2 := BlueData{"54:9B:12:D2:09:4C", "SmartphoneClass", "Timeisnotnow"}
+	d2 := BlueData{"54:9B:12:D2:09:4C", "SmartphoneClass", time.Now()}
 	CollectedBlueData.Set("54:9B:12:D2:09:4C", d2)
 	currDetected = CollectedBlueData.GetAsSlice()
 
@@ -288,7 +289,7 @@ func TestAllFulfilled(t *testing.T) {
 		t.Errorf("Should not return true.\nCurrDetected should be empty: %v.", currDetected)
 	}
 
-	d1 := BlueData{"24:DA:9B:BB:EE:2B", "SmartphoneClass", "Time is now"}
+	d1 := BlueData{"24:DA:9B:BB:EE:2B", "SmartphoneClass", time.Now()}
 	CollectedBlueData.Set("24:DA:9B:BB:EE:2B", d1)
 	currDetected = CollectedBlueData.GetAsSlice()
 
@@ -307,7 +308,7 @@ func TestAllFulfilled(t *testing.T) {
 		t.Errorf("The perm should be matched with the currDetected, perm: %v, perm: %v", permFailOpen, permFailView)
 	}
 
-	d2 := BlueData{"54:9B:12:D2:09:4C", "SmartphoneClass", "Timeisnotnow"}
+	d2 := BlueData{"54:9B:12:D2:09:4C", "SmartphoneClass", time.Now()}
 	CollectedBlueData.Set("54:9B:12:D2:09:4C", d2)
 	currDetected = CollectedBlueData.GetAsSlice()
 

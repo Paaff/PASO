@@ -46,7 +46,7 @@ func findAndDiscoverBTClass(inq []byte, dataChannel chan store.BlueData) {
 			// Check that we have the correct class (Phone)
 			className, ok := checkBTClass(bluetoothLine[5])
 			if ok {
-				phone = store.BlueData{Address: bluetoothLine[0], Class: className, Timestamp: time.Now().Format(time.RFC1123Z)}
+				phone = store.BlueData{Address: bluetoothLine[0], Class: className, Timestamp: time.Now()}
 				fmt.Printf("The bluetooth address %v, and the class is %v\n", bluetoothLine[0], bluetoothLine[5])
 				dataChannel <- phone
 			} else {
