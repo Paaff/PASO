@@ -81,7 +81,7 @@ func (cdm *BlueDataMap) Get(key string) (BlueData, bool) {
 
 // GetAsSlice will pull each value from the map and return it as a slice of BlueData
 func (cdm *BlueDataMap) GetAsSlice() []BlueData {
-	maxTimeDuration := time.Minute
+	maxTimeDuration := time.Duration(30) * time.Second
 	var result []BlueData
 	cdm.RLock()
 	defer cdm.RUnlock()
@@ -89,7 +89,7 @@ func (cdm *BlueDataMap) GetAsSlice() []BlueData {
 
 	for _, v := range cdm.items {
 		timeWhenDetected := v.Timestamp
-		duration := timeWhenDetected.Sub(timeNow)
+		duration := timeNow.Sub(timeWhenDetected)
 		if duration <= maxTimeDuration {
 			result = append(result, v)
 		}
