@@ -15,10 +15,15 @@ type scanFunc func(dataChannel chan store.BlueData)
 
 // BT detection
 func detectBluetooth(dataChannel chan store.BlueData) {
-	t := time.NewTicker(3 * time.Second)
+	// t := time.NewTicker(10 * time.Second)
+	// for {
+	//
+	// 	<-t.C
+	// }
+
 	for {
+		time.Sleep(time.Second * 5)
 		scan(dataChannel)
-		<-t.C
 	}
 }
 
