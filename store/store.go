@@ -190,6 +190,10 @@ func permsFulfilled(project Project, currDetected []BlueData) bool {
 }
 
 func singleFulfilled(perm Permission, currDetected []BlueData) bool {
+	if len(currDetected) == 0 {
+		return false
+	}
+
 	for _, blueData := range currDetected {
 		client, okClient := ValidClientsMap.Get(blueData.Address)
 		okPerm := client.ContainsPerm(perm)
@@ -201,6 +205,10 @@ func singleFulfilled(perm Permission, currDetected []BlueData) bool {
 }
 
 func allFulfilled(perm Permission, currDetected []BlueData) bool {
+	if len(currDetected) == 0 {
+		return false
+	}
+
 	for _, blueData := range currDetected {
 		client, okClient := ValidClientsMap.Get(blueData.Address)
 		okPerm := client.ContainsPerm(perm)

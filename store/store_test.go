@@ -215,3 +215,118 @@ func TestGetValidProjects(t *testing.T) {
 	}
 
 }
+
+func TestSingleFulFilled(t *testing.T) {
+	ValidClientsMap = ClientsMap{}
+	ValidClientsMap.NewClientsMap()
+	populateValidClients()
+
+	CollectedBlueData = BlueDataMap{}
+	CollectedBlueData.NewBlueDataMap()
+
+	permFailOpen := Permission{"Fail", "Open"}
+	permFailView := Permission{"FailAlso", "View"}
+
+	currDetected := CollectedBlueData.GetAsSlice()
+
+	// Nothing is detected yet.
+	ok := singleFulfilled(permFailOpen, currDetected)
+	if ok {
+		t.Errorf("Should not return true.\nCurrDetected should be empty: %v.", currDetected)
+	}
+
+	d1 := BlueData{"24:DA:9B:BB:EE:2B", "SmartphoneClass", "Time is now"}
+	CollectedBlueData.Set("24:DA:9B:BB:EE:2B", d1)
+	currDetected = CollectedBlueData.GetAsSlice()
+
+	ok = singleFulfilled(permFailOpen, currDetected)
+	ko := singleFulfilled(permFailView, currDetected)
+	if ok || ko {
+		t.Errorf("The perm should not be matched with any, perm: %v, perm: %v", permFailOpen, permFailView)
+	}
+
+	permOpen := Permission{"OpenA", "Open"}
+	permView := Permission{"ViewA", "View"}
+
+	ok = singleFulfilled(permOpen, currDetected)
+	ko = singleFulfilled(permView, currDetected)
+	if !ok || !ko {
+		t.Errorf("The perm should be matched with the currDetected, perm: %v, perm: %v", permFailOpen, permFailView)
+	}
+
+	d2 := BlueData{"54:9B:12:D2:09:4C", "SmartphoneClass", "Timeisnotnow"}
+	CollectedBlueData.Set("54:9B:12:D2:09:4C", d2)
+	currDetected = CollectedBlueData.GetAsSlice()
+
+	permOpen = Permission{"OpenA", "Open"}
+	permView = Permission{"ViewB", "View"}
+
+	ok = singleFulfilled(permOpen, currDetected)
+	ko = singleFulfilled(permView, currDetected)
+	if !ok || !ko {
+		t.Errorf("The perm should be matched with the currDetected, perm: %v, perm: %v", permFailOpen, permFailView)
+	}
+
+}
+
+func TestAllFulfilled(t *testing.T) {
+	ValidClientsMap = ClientsMap{}
+	ValidClientsMap.NewClientsMap()
+	populateValidClients()
+
+	CollectedBlueData = BlueDataMap{}
+	CollectedBlueData.NewBlueDataMap()
+
+	permFailOpen := Permission{"Fail", "Open"}
+	permFailView := Permission{"FailAlso", "View"}
+
+	currDetected := CollectedBlueData.GetAsSlice()
+
+	// Nothing is detected yet.
+	ok := allFulfilled(permFailOpen, currDetected)
+	if ok {
+		t.Errorf("Should not return true.\nCurrDetected should be empty: %v.", currDetected)
+	}
+
+	d1 := BlueData{"24:DA:9B:BB:EE:2B", "SmartphoneClass", "Time is now"}
+	CollectedBlueData.Set("24:DA:9B:BB:EE:2B", d1)
+	currDetected = CollectedBlueData.GetAsSlice()
+
+	ok = allFulfilled(permFailOpen, currDetected)
+	ko := allFulfilled(permFailView, currDetected)
+	if ok || ko {
+		t.Errorf("The perm should not be matched with any, perm: %v, perm: %v", permFailOpen, permFailView)
+	}
+
+	permOpen := Permission{"OpenA", "Open"}
+	permView := Permission{"ViewA", "View"}
+
+	ok = allFulfilled(permOpen, currDetected)
+	ko = allFulfilled(permView, currDetected)
+	if !ok || !ko {
+		t.Errorf("The perm should be matched with the currDetected, perm: %v, perm: %v", permFailOpen, permFailView)
+	}
+
+	d2 := BlueData{"54:9B:12:D2:09:4C", "SmartphoneClass", "Timeisnotnow"}
+	CollectedBlueData.Set("54:9B:12:D2:09:4C", d2)
+	currDetected = CollectedBlueData.GetAsSlice()
+
+	permOpen = Permission{"OpenA", "Open"}
+	permView = Permission{"ViewB", "View"}
+
+	ok = allFulfilled(permOpen, currDetected)
+	ko = allFulfilled(permView, currDetected)
+	if ok && ko {
+		t.Errorf("The perm should not be matched with the currDetected, perm: %v, perm: %v", permFailOpen, permFailView)
+	}
+
+	permViewA := Permission{"ViewA", "View"}
+	permViewB := Permission{"ViewB", "View"}
+
+	ok = allFulfilled(permViewA, currDetected)
+	ko = allFulfilled(permViewB, currDetected)
+	if !ok || ko {
+		t.Errorf("The permViewA should be matched with the currDetected, but permViewB should not, perm: %v, perm: %v", permFailOpen, permFailView)
+	}
+
+}
