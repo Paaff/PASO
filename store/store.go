@@ -165,9 +165,17 @@ func (p *ProjectsList) Remove(elem Project) bool {
 func (p *ProjectsList) GetValidProjects() []Project {
 	validProjects := make([]Project, 0)
 
+	// Are there any detected?
 	currentDetected := CollectedBlueData.GetAsSlice()
 	if len(currentDetected) == 0 {
 		return validProjects
+	}
+
+	// Are there any unknowns in the detected?
+	for _, blueDate := range currentDetected {
+		if blueDate.Class == "Unknown" {
+			return validProjects
+		}
 	}
 
 	for _, project := range p.elements {

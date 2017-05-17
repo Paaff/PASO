@@ -33,3 +33,10 @@ func RetrieveBTData(w http.ResponseWriter, r *http.Request) {
 func RetrieveProjects(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(store.Projects.GetValidProjects())
 }
+
+// AddClient - Takes an unknown detected BlueData and adds it as a valid client in the system, together
+// with the appropiate permissions chosen.
+func AddClient(w http.ResponseWriter, r *http.Request) {
+
+	r.Form
+}
