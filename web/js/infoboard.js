@@ -8,9 +8,7 @@ Vue.component('client-item', {
       var newClient = {
         "Address": address,
         "Name": "user-chosen-name",
-        "Projects": {
-          "Project": "Project A"
-        }
+        "Projects": ["Project A", "Project B"]
       };
       var request = new Request('http://192.168.0.109:3000/api/add', {method: 'POST', body: newClient});
 
