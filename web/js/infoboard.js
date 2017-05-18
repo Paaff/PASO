@@ -2,20 +2,24 @@
 Vue.component('client-item', {
   // Template
   props: ['client'],
+  data: function () {
+    return {
+      address: client.Address
+    };
+  },
   methods: {
     addClient: function() {
-      console.debug(client.Address);
       var newClient = {
-        "Address": client.Address,
+        "Address": this.address,
         "Name": "user-chosen-name",
         "Projects": ["Project A", "Project B"]
       };
-      console.debug(newClient);
+
       var request = new Request('http://192.168.0.109:3000/api/users', {method: 'POST', body: newClient});
 
       fetch(request)
         .then(function(response) {
-          if(response.status == 201) return response.json();
+          if(response.status == 200) return response.json();
           else throw new Error('Server did not send a good response');
         })
         .then(function(response) {
