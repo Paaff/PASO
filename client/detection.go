@@ -33,7 +33,7 @@ func scan(dataChannel chan store.BlueData) {
 	if cmdErr != nil {
 		log.Fatal(cmdErr)
 	}
-	fmt.Printf("Scanning...")
+	fmt.Printf("Scanning...\n")
 	cmdErr = cmd.Wait()
 	if cmdErr != nil {
 		log.Fatal(cmdErr)

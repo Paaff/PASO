@@ -10,7 +10,7 @@ Vue.component('client-item', {
   methods: {
     addClient: function() {
       var newClient = JSON.stringify({
-        "Address": this.address,
+        "Address": this.Address,
         "Name": "user-chosen-name",
         "Projects": ["Project A", "Project B"]
       });
