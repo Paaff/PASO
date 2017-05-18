@@ -1,16 +1,15 @@
 // Bluetooth Client Component
 Vue.component('client-item', {
   // Template
-  props: ['client'],  
+  props: ['client'],
   methods: {
     addClient: function() {
       var newClient = JSON.stringify({
-        "Address": this.Address,
+        "Address": this.client.Address,
         "Name": "user-chosen-name",
         "Projects": ["Project A", "Project B"]
       });
-
-
+      
       var request = new Request('http://192.168.0.109:3000/api/users', {method: 'POST', body: newClient});
 
       fetch(request)
