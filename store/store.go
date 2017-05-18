@@ -123,9 +123,33 @@ func (c *Client) ContainsPerm(perm Permission) bool {
 	return false
 }
 
+// GetPerm retrieves the type of perm asked for
+func (p *Project) GetPerm(permT string) Permission {
+	var perm Permission
+	for _, p := range p.RequiredPermissions {
+		if p.PermType == permT {
+			perm = p
+			return p
+		}
+	}
+	return perm
+}
+
 // Add - Selfexplanatory
 func (p *ProjectsList) Add(elem Project) {
 	p.elements = append(p.elements, elem)
+}
+
+// Get - Selfexplanatory
+func (p *ProjectsList) Get(name string) (Project, bool) {
+	var found Project
+	for _, elem := range p.elements {
+		if elem.ProjectName == name {
+			found = elem
+			return found, true
+		}
+	}
+	return found, false
 }
 
 // Contains - Selfexplanatory

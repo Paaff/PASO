@@ -3,10 +3,31 @@ Vue.component('client-item', {
   // Template
   props: ['client'],
   methods: {
-    addClient: function() {
-      alert("WORKING");
+    addClient: function(address) {
+      console.debug(address);
+      var newClient = {
+        "Address": address,
+        "Name": "user-chosen-name",
+        "Projects": {
+          "Project": "Project A"
+        }
+      };
+      var request = new Request('http://192.168.0.109:3000/api/add', {method: 'POST', body: newClient});
+
+      fetch(myRequest)
+        .then(function(response) {
+          if(response.status == 201) return response.json();
+          else throw new Error('Server did not send a good response');
+        })
+        .then(function(response) {
+          console.debug(response);
+        })
+        .catch(function(error) {
+          console.error(error);
+        });
     }
   },
+
   template: `
   <div class="panel">
       <section>
@@ -16,7 +37,7 @@ Vue.component('client-item', {
           <li>Last updated: {{ client.Timestamp }} </li>
         </ul>
       </section>
-      <button v-on:click="addClient">ADD</button>
+      <button v-on:click="addClient( {{ client.Address }})">ADD</button>
   </div>
   `
 });
