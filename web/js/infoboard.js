@@ -2,6 +2,11 @@
 Vue.component('client-item', {
   // Template
   props: ['client'],
+  methods: {
+    addClient: function() {
+      alert("WORKING");
+    }
+  },
   template: `
   <div class="panel">
       <section>
@@ -45,18 +50,12 @@ Vue.component('project-item', {
 });
 
 
-
 // Main Vue
 var vm = new Vue({
   el: '#app',
   data: {
     projectList: [],
     clientList: []
-  },
-  methods: {
-    addClient: function() {
-      alert("WORKING");
-    }
   }
 });
 
