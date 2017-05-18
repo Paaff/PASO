@@ -11,6 +11,7 @@ Vue.component('client-item', {
           <li>Last updated: {{ client.Timestamp }} </li>
         </ul>
       </section>
+      <button v-on:click="addClient">ADD</button>
   </div>
   `
 });
@@ -51,6 +52,11 @@ var vm = new Vue({
   data: {
     projectList: [],
     clientList: []
+  },
+  methods: {
+    addClient: function (event) {
+      alert("WORKING");
+    }
   }
 });
 
