@@ -30,7 +30,7 @@ func Start(conf *config.Config) {
 			fmt.Println("JSON Marshal went wrong")
 		}
 		if err = w.PublishMessage(jsonData, conf.ExchangeName, conf.RoutingKey); err != nil {
-			fmt.Println("Publish went wrong.")
+			fmt.Printf("Publish went wrong. Err: %v\n", err)
 		}
 	}
 
