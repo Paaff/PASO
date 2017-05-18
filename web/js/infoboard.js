@@ -54,7 +54,7 @@ var vm = new Vue({
     clientList: []
   },
   methods: {
-    addClient: function (event) {
+    addClient: function() {
       alert("WORKING");
     }
   }
