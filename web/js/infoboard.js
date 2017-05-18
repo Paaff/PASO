@@ -4,7 +4,7 @@ Vue.component('client-item', {
   props: ['client'],
   data: function () {
     return {
-      address: client.Address
+      Address: ''
     };
   },
   methods: {
