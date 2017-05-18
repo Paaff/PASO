@@ -3,7 +3,9 @@ package web
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"strings"
 
 	"github.com/paaff/PASO/store"
 )
@@ -37,6 +39,39 @@ func RetrieveProjects(w http.ResponseWriter, r *http.Request) {
 // AddClient - Takes an unknown detected BlueData and adds it as a valid client in the system, together
 // with the appropiate permissions chosen.
 func AddClient(w http.ResponseWriter, r *http.Request) {
+	// Parse the form data
+	err := r.ParseForm()
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	r.Form
+	// Use the form data to create a new ValidClient addition
+	address := r.FormValue("address")
+	name := r.FormValue("name")
+	perms := r.Form["permissions"]
+
+	var permissions []store.Permission
+	for _, perm := range perms {
+		splitted := strings.Split(perm, ",")
+		p := splitted[0]
+		t := splitted[1]
+		permissions = append(permissions, store.Permission{
+			Perm: p, PermType: t,
+		})
+	}
+
+	newClient := store.Client{
+		Name:        name,
+		Permissions: permissions,
+	}
+
+	store.ValidClientsMap.Set(address, newClient)
+
+	// Check that the adding of a valid client went okay
+	_, ok := store.ValidClientsMap.Get(address)
+	if !ok {
+		fmt.Fprint(w, http.StatusConflict)
+	}
+	fmt.Fprint(w, http.StatusCreated)
+
 }
