@@ -25,7 +25,6 @@ Vue.component('client-item', {
         });
     }
   },
-
   template: `
   <div class="panel">
       <section>
@@ -35,7 +34,7 @@ Vue.component('client-item', {
           <li>Last updated: {{ client.Timestamp }} </li>
         </ul>
       </section>
-      <button v-on:click="addClient( {{ client.Address }})">ADD</button>
+      <button v-on:click="addClient('{{ client.Address }}')">ADD</button>
   </div>
   `
 });
