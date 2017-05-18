@@ -10,7 +10,7 @@ Vue.component('client-item', {
         "Name": "user-chosen-name",
         "Projects": ["Project A", "Project B"]
       };
-      var request = new Request('http://192.168.0.109:3000/api/add', {method: 'POST', body: newClient});
+      var request = new Request('http://192.168.0.109:3000/api/users', {method: 'POST', body: newClient});
 
       fetch(request)
         .then(function(response) {
