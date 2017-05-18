@@ -2,9 +2,7 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
-	"runtime"
 
 	"github.com/paaff/PASO/client"
 	"github.com/paaff/PASO/config"
@@ -19,31 +17,25 @@ func main() {
 	launchFlag := flag.String("launch", "client", "Flag that describes whether its a server or a client instance.")
 	flag.Parse()
 
-	if isUnix(runtime.GOOS) {
-		fmt.Println("Unix type OS detected")
-		if *launchFlag == "server" {
-			// TODO: Should this be started as a "go" function - Async
-			// Why should it be that?
-			c, err := config.LoadConfig(serverConfPath)
-			if err != nil {
-				log.Fatal(err)
-			}
-			server.Start(c)
-
-		} else if *launchFlag == "client" {
-			c, err := config.LoadConfig(clientConfPath)
-			if err != nil {
-				log.Fatal(err)
-			}
-			client.Start(c)
-
-		} else {
-			log.Fatal("Launch Flag is either 'server' or 'client'")
+	if *launchFlag == "server" {
+		// TODO: Should this be started as a "go" function - Async
+		// Why should it be that?
+		c, err := config.LoadConfig(serverConfPath)
+		if err != nil {
+			log.Fatal(err)
 		}
-	} else {
-		log.Fatal("This is not a linux system, which is intended for this project at the moment.")
-	}
+		server.Start(c)
 
+	} else if *launchFlag == "client" {
+		c, err := config.LoadConfig(clientConfPath)
+		if err != nil {
+			log.Fatal(err)
+		}
+		client.Start(c)
+
+	} else {
+		log.Fatal("Launch Flag is either 'server' or 'client'")
+	}
 }
 
 func initLaunchFlags() {

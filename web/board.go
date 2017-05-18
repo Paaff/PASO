@@ -50,7 +50,7 @@ func UserHandle(w http.ResponseWriter, r *http.Request) {
 		dec := json.NewDecoder(r.Body)
 		err := dec.Decode(&newInfo)
 		if err != nil {
-			fmt.Println("shit went down")
+			fmt.Print(err)
 		}
 
 		client := store.Client{
