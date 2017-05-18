@@ -1,12 +1,7 @@
 // Bluetooth Client Component
 Vue.component('client-item', {
   // Template
-  props: ['client'],
-  data: function () {
-    return {
-      Address: ''
-    };
-  },
+  props: ['client'],  
   methods: {
     addClient: function() {
       var newClient = JSON.stringify({
@@ -33,14 +28,14 @@ Vue.component('client-item', {
   },
   template: `
   <div class="panel">
-      <section>
-        <ul>
-          <li>Address: {{ client.Address }} </li>
-          <li>Class: {{ client.Class }} </li>
-          <li>Last updated: {{ client.Timestamp }} </li>
-        </ul>
-      </section>
-      <button v-on:click="addClient">ADD</button>
+  <section>
+  <ul>
+  <li>Address: {{ client.Address }} </li>
+  <li>Class: {{ client.Class }} </li>
+  <li>Last updated: {{ client.Timestamp }} </li>
+  </ul>
+  </section>
+  <button @click="addClient">ADD</button>
   </div>
   `
 });
