@@ -8,6 +8,12 @@ import (
 	"github.com/paaff/PASO/store"
 )
 
+type newClient struct {
+	Address  string
+	Name     string
+	Projects []string
+}
+
 // InitBoard will start the web server and host index.html.
 func InitBoard() {
 	webDir := "./web"
@@ -70,10 +76,4 @@ func UserHandle(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, http.StatusCreated)
 	}
 
-}
-
-type newClient struct {
-	Address  string
-	Name     string
-	Projects []string
 }

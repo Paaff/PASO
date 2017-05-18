@@ -3,13 +3,14 @@ Vue.component('client-item', {
   // Template
   props: ['client'],
   methods: {
-    addClient: function(address) {
-      console.debug(address);
+    addClient: function() {
+      console.debug(client.Address);
       var newClient = {
-        "Address": address,
+        "Address": client.Address,
         "Name": "user-chosen-name",
         "Projects": ["Project A", "Project B"]
       };
+      console.debug(newClient);
       var request = new Request('http://192.168.0.109:3000/api/users', {method: 'POST', body: newClient});
 
       fetch(request)
@@ -34,7 +35,7 @@ Vue.component('client-item', {
           <li>Last updated: {{ client.Timestamp }} </li>
         </ul>
       </section>
-      <button v-on:click="addClient('{{ client.Address }}')">ADD</button>
+      <button v-on:click="addClient">ADD</button>
   </div>
   `
 });
