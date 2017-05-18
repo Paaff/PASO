@@ -22,8 +22,8 @@ func detectBluetooth(dataChannel chan store.BlueData) {
 	// }
 
 	for {
-		time.Sleep(time.Second * 10)
 		scan(dataChannel)
+		time.Sleep(time.Second * 10)
 	}
 }
 

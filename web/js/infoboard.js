@@ -12,7 +12,7 @@ Vue.component('client-item', {
       };
       var request = new Request('http://192.168.0.109:3000/api/add', {method: 'POST', body: newClient});
 
-      fetch(myRequest)
+      fetch(request)
         .then(function(response) {
           if(response.status == 201) return response.json();
           else throw new Error('Server did not send a good response');
