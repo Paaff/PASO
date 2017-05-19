@@ -195,9 +195,10 @@ func (p *ProjectsList) GetValidProjects() []Project {
 		return validProjects
 	}
 
-	// Are there any unknowns in the detected?
+	// Are all the detected devices in the ValidClientsMap?
 	for _, blueDate := range currentDetected {
-		if blueDate.Class == "Unknown" {
+		_, ok := ValidClientsMap.Get(blueDate.Address)
+		if !ok {
 			return validProjects
 		}
 	}
