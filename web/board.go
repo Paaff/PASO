@@ -52,6 +52,7 @@ func UserHandle(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Print(err)
 		}
+		fmt.Println(newInfo)
 
 		client := store.Client{
 			Name:        newInfo.Name,
@@ -62,17 +63,20 @@ func UserHandle(w http.ResponseWriter, r *http.Request) {
 		for _, p := range newInfo.Projects {
 			project, ok := store.Projects.Get(p)
 			if ok {
+				fmt.Printf("This is the project: %v and this is the project we got %v", p, project)
 				client.Permissions = append(client.Permissions, project.GetPerm("View"))
+				fmt.Printf("After appending the permission on: %v", client.Permissions)
 			}
 		}
 
 		store.ValidClientsMap.Set(newInfo.Address, client)
 
 		// Check that the adding of a valid client went okay
-		_, ok := store.ValidClientsMap.Get(newInfo.Address)
+		c, ok := store.ValidClientsMap.Get(newInfo.Address)
 		if !ok {
 			fmt.Fprint(w, http.StatusConflict)
 		}
+		fmt.Printf("We've set the new client and now we try to get it again and see it: %v", c)
 		fmt.Fprint(w, http.StatusCreated)
 	}
 
