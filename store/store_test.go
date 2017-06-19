@@ -217,7 +217,7 @@ func TestGetValidProjects(t *testing.T) {
 
 }
 
-func TestSingleFulFilled(t *testing.T) {
+func TestAmountFulFilled(t *testing.T) {
 	ValidClientsMap = ClientsMap{}
 	ValidClientsMap.NewClientsMap()
 	populateValidClients()
@@ -231,8 +231,8 @@ func TestSingleFulFilled(t *testing.T) {
 	currDetected := CollectedBlueData.GetAsSlice()
 
 	// Nothing is detected yet.
-	ok := singleFulfilled(permFailOpen, currDetected)
-	if ok {
+	n := amountFulfilled(permFailOpen, currDetected)
+	if n != 0 {
 		t.Errorf("Should not return true.\nCurrDetected should be empty: %v.", currDetected)
 	}
 
@@ -240,19 +240,19 @@ func TestSingleFulFilled(t *testing.T) {
 	CollectedBlueData.Set("24:DA:9B:BB:EE:2B", d1)
 	currDetected = CollectedBlueData.GetAsSlice()
 
-	ok = singleFulfilled(permFailOpen, currDetected)
-	ko := singleFulfilled(permFailView, currDetected)
-	if ok || ko {
+	n = amountFulfilled(permFailOpen, currDetected)
+	m := amountFulfilled(permFailView, currDetected)
+	if (n != 0) || (m != 0) {
 		t.Errorf("The perm should not be matched with any, perm: %v, perm: %v", permFailOpen, permFailView)
 	}
 
 	permOpen := Permission{"OpenA", "Open"}
 	permView := Permission{"ViewA", "View"}
 
-	ok = singleFulfilled(permOpen, currDetected)
-	ko = singleFulfilled(permView, currDetected)
-	if !ok || !ko {
-		t.Errorf("The perm should be matched with the currDetected, perm: %v, perm: %v", permFailOpen, permFailView)
+	n = amountFulfilled(permOpen, currDetected)
+	m = amountFulfilled(permView, currDetected)
+	if !(n == 1) || !(m == 1) {
+		t.Errorf("The perm should be matched with the currDetected, perm: %v, perm: %v", permOpen, permView)
 	}
 
 	d2 := BlueData{"54:9B:12:D2:09:4C", "SmartphoneClass", time.Now()}
@@ -262,10 +262,10 @@ func TestSingleFulFilled(t *testing.T) {
 	permOpen = Permission{"OpenA", "Open"}
 	permView = Permission{"ViewB", "View"}
 
-	ok = singleFulfilled(permOpen, currDetected)
-	ko = singleFulfilled(permView, currDetected)
-	if !ok || !ko {
-		t.Errorf("The perm should be matched with the currDetected, perm: %v, perm: %v", permFailOpen, permFailView)
+	n = amountFulfilled(permOpen, currDetected)
+	m = amountFulfilled(permView, currDetected)
+	if !(n == 1) || !(m == 1) {
+		t.Errorf("The perm should be matched with the currDetected, perm: %v, perm: %v", permOpen, permView)
 	}
 
 }
@@ -305,7 +305,7 @@ func TestAllFulfilled(t *testing.T) {
 	ok = allFulfilled(permOpen, currDetected)
 	ko = allFulfilled(permView, currDetected)
 	if !ok || !ko {
-		t.Errorf("The perm should be matched with the currDetected, perm: %v, perm: %v", permFailOpen, permFailView)
+		t.Errorf("The perm should be matched with the currDetected, perm: %v, perm: %v", permOpen, permView)
 	}
 
 	d2 := BlueData{"54:9B:12:D2:09:4C", "SmartphoneClass", time.Now()}
@@ -318,7 +318,7 @@ func TestAllFulfilled(t *testing.T) {
 	ok = allFulfilled(permOpen, currDetected)
 	ko = allFulfilled(permView, currDetected)
 	if ok && ko {
-		t.Errorf("The perm should not be matched with the currDetected, perm: %v, perm: %v", permFailOpen, permFailView)
+		t.Errorf("The perm should not be matched with the currDetected, perm: %v, perm: %v", permOpen, permView)
 	}
 
 	permViewA := Permission{"ViewA", "View"}
@@ -327,7 +327,7 @@ func TestAllFulfilled(t *testing.T) {
 	ok = allFulfilled(permViewA, currDetected)
 	ko = allFulfilled(permViewB, currDetected)
 	if !ok || ko {
-		t.Errorf("The permViewA should be matched with the currDetected, but permViewB should not, perm: %v, perm: %v", permFailOpen, permFailView)
+		t.Errorf("The permViewA should be matched with the currDetected, but permViewB should not, perm: %v, perm: %v", permOpen, permView)
 	}
 
 }

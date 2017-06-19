@@ -135,6 +135,18 @@ func (p *Project) GetPerm(permT string) Permission {
 	return perm
 }
 
+// GetOpenAmount returns how many permissions are of type open in the project.
+func (p *Project) GetOpenAmount() int {
+	amount := 0
+
+	for _, perm := range p.RequiredPermissions {
+		if perm.PermType == "Open" {
+			amount++
+		}
+	}
+	return amount
+}
+
 // Add - Selfexplanatory
 func (p *ProjectsList) Add(elem Project) {
 	p.elements = append(p.elements, elem)
@@ -213,9 +225,12 @@ func (p *ProjectsList) GetValidProjects() []Project {
 }
 
 func permsFulfilled(project Project, currDetected []BlueData) bool {
+
+	amount := project.GetOpenAmount()
+
 	for _, perm := range project.RequiredPermissions {
 		if perm.PermType == "Open" {
-			if ok := singleFulfilled(perm, currDetected); ok != true {
+			if n := amountFulfilled(perm, currDetected); n != amount {
 				return false
 			}
 		}
@@ -228,19 +243,19 @@ func permsFulfilled(project Project, currDetected []BlueData) bool {
 	return true
 }
 
-func singleFulfilled(perm Permission, currDetected []BlueData) bool {
+func amountFulfilled(perm Permission, currDetected []BlueData) int {
 	if len(currDetected) == 0 {
-		return false
+		return 0
 	}
-
+	count := 0
 	for _, blueData := range currDetected {
 		client, okClient := ValidClientsMap.Get(blueData.Address)
 		okPerm := client.ContainsPerm(perm)
 		if okClient && okPerm {
-			return true
+			count++
 		}
 	}
-	return false
+	return count
 }
 
 func allFulfilled(perm Permission, currDetected []BlueData) bool {
