@@ -101,7 +101,7 @@ func scenario3() {
 	reader.ReadString('\n')
 
 	fmt.Fprint(os.Stdout, "Detecting Intruder.\nPublishing detection to server.")
-	trudy := store.BlueData{Address: "Alice2_ID", Class: "Motion Sensor", Timestamp: time.Now()}
+	trudy := store.BlueData{Address: "INTRUDER - NO ID", Class: "Motion Sensor", Timestamp: time.Now()}
 	publishScenarioData(trudy)
 }
 
