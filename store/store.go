@@ -81,7 +81,8 @@ func (cdm *BlueDataMap) Get(key string) (BlueData, bool) {
 
 // GetAsSlice will pull each value from the map and return it as a slice of BlueData
 func (cdm *BlueDataMap) GetAsSlice() []BlueData {
-	maxTimeDuration := time.Duration(30) * time.Second
+	// DEMO ADDITION:
+	maxTimeDuration := time.Duration(30) * time.Minute
 	var result []BlueData
 	cdm.RLock()
 	defer cdm.RUnlock()
@@ -230,7 +231,7 @@ func permsFulfilled(project Project, currDetected []BlueData) bool {
 
 	for _, perm := range project.RequiredPermissions {
 		if perm.PermType == "Open" {
-			if n := amountFulfilled(perm, currDetected); n != amount {
+			if n := amountFulfilled(perm, currDetected); n < amount {
 				return false
 			}
 		}

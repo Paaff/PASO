@@ -6,6 +6,7 @@ import (
 
 	"github.com/paaff/PASO/client"
 	"github.com/paaff/PASO/config"
+	"github.com/paaff/PASO/demo"
 	"github.com/paaff/PASO/server"
 )
 
@@ -32,16 +33,19 @@ func main() {
 			log.Fatal(err)
 		}
 		client.Start(c)
-
+	} else if *launchFlag == "clientdemo" {
+		c, err := config.LoadConfig(clientConfPath)
+		if err != nil {
+			log.Fatal(err)
+		}
+		demo.StartDemo(c)
+	} else if *launchFlag == "serverdemo" {
+		c, err := config.LoadConfig(serverConfPath)
+		if err != nil {
+			log.Fatal(err)
+		}
+		server.Start(c)
 	} else {
 		log.Fatal("Launch Flag is either 'server' or 'client'")
 	}
-}
-
-func initLaunchFlags() {
-
-}
-
-func isUnix(runtimeOS string) bool {
-	return runtimeOS == "linux"
 }

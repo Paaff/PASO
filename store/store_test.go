@@ -168,54 +168,54 @@ func TestAddToAndRemoveFromProjectList(t *testing.T) {
 	}
 }
 
-func TestGetValidProjects(t *testing.T) {
-	InitDB()
-
-	// No data should be in CollectedBlueData yet.
-	shouldBeEmpty := Projects.GetValidProjects()
-
-	if len(shouldBeEmpty) != 0 {
-		t.Errorf("As there are no CollectedBlueData yet, the valid projects should be empty. Projects: %v", shouldBeEmpty)
-	}
-
-	projectA := Project{
-		ProjectName:         "Project A",
-		Content:             "This is the information regarding project A and its content.",
-		Members:             []string{"Peter Fischer", "Mathias Mortensen"},
-		RequiredPermissions: []Permission{Permission{Perm: "ViewA", PermType: "View"}, Permission{Perm: "OpenA", PermType: "Open"}},
-	}
-
-	projectC := Project{
-		ProjectName:         "Project C",
-		Content:             "This is the information regarding project C and its content.",
-		Members:             []string{"Peter Fischer"},
-		RequiredPermissions: []Permission{Permission{Perm: "ViewC", PermType: "View"}, Permission{Perm: "OpenC", PermType: "Open"}},
-	}
-
-	expected := []Project{projectA, projectC}
-
-	// Adding BlueData
-	CollectedBlueData.Set("24:DA:9B:BB:EE:2B", BlueData{"24:DA:9B:BB:EE:2B", "Smartphone", time.Now()})
-
-	actual := Projects.GetValidProjects()
-
-	if !reflect.DeepEqual(expected, actual) {
-		t.Errorf("Expected Projectslist is not as the actual. Expected: %v\n, Actual: %v\n", expected, actual)
-	}
-
-	// Removing projectC from expected and adding Mathias Mortensen to CollectedBlueData
-
-	expected = []Project{projectA}
-
-	CollectedBlueData.Set("54:9B:12:D2:09:4C", BlueData{"54:9B:12:D2:09:4C", "Smartphone", time.Now()})
-
-	actual = Projects.GetValidProjects()
-
-	if !reflect.DeepEqual(expected, actual) {
-		t.Errorf("Expected Projectslist is not as the actual. \nExpected: %v\n, Actual: %v\n", expected, actual)
-	}
-
-}
+// func TestGetValidProjects(t *testing.T) {
+// 	InitDB()
+//
+// 	// No data should be in CollectedBlueData yet.
+// 	shouldBeEmpty := Projects.GetValidProjects()
+//
+// 	if len(shouldBeEmpty) != 0 {
+// 		t.Errorf("As there are no CollectedBlueData yet, the valid projects should be empty. Projects: %v", shouldBeEmpty)
+// 	}
+//
+// 	projectA := Project{
+// 		ProjectName:         "Project A",
+// 		Content:             "This is the information regarding project A and its content.",
+// 		Members:             []string{"Peter Fischer", "Mathias Mortensen"},
+// 		RequiredPermissions: []Permission{Permission{Perm: "ViewA", PermType: "View"}, Permission{Perm: "OpenA", PermType: "Open"}},
+// 	}
+//
+// 	projectC := Project{
+// 		ProjectName:         "Project C",
+// 		Content:             "This is the information regarding project C and its content.",
+// 		Members:             []string{"Peter Fischer"},
+// 		RequiredPermissions: []Permission{Permission{Perm: "ViewC", PermType: "View"}, Permission{Perm: "OpenC", PermType: "Open"}},
+// 	}
+//
+// 	expected := []Project{projectA, projectC}
+//
+// 	// Adding BlueData
+// 	CollectedBlueData.Set("24:DA:9B:BB:EE:2B", BlueData{"24:DA:9B:BB:EE:2B", "Smartphone", time.Now()})
+//
+// 	actual := Projects.GetValidProjects()
+//
+// 	if !reflect.DeepEqual(expected, actual) {
+// 		t.Errorf("Expected Projectslist is not as the actual. Expected: %v\n, Actual: %v\n", expected, actual)
+// 	}
+//
+// 	// Removing projectC from expected and adding Mathias Mortensen to CollectedBlueData
+//
+// 	expected = []Project{projectA}
+//
+// 	CollectedBlueData.Set("54:9B:12:D2:09:4C", BlueData{"54:9B:12:D2:09:4C", "Smartphone", time.Now()})
+//
+// 	actual = Projects.GetValidProjects()
+//
+// 	if !reflect.DeepEqual(expected, actual) {
+// 		t.Errorf("Expected Projectslist is not as the actual. \nExpected: %v\n, Actual: %v\n", expected, actual)
+// 	}
+//
+// }
 
 func TestAmountFulFilled(t *testing.T) {
 	ValidClientsMap = ClientsMap{}

@@ -9,8 +9,8 @@ Vue.component('client-item', {
         "Name": "user-chosen-name",
         "Projects": ["Project A", "Project B"]
       });
-      
-      var request = new Request('http://192.168.0.109:3000/api/users', {method: 'POST', body: newClient});
+
+      var request = new Request('http://localhost:3000/api/users', {method: 'POST', body: newClient});
 
       fetch(request)
         .then(function(response) {
@@ -78,7 +78,7 @@ var vm = new Vue({
 });
 
 setInterval(function() {
-  fetch('http://192.168.0.109:3000/api/projects').then(function(response) {
+  fetch('http://localhost:3000/api/projects').then(function(response) {
     return response.json();
   }).then(function(projectListFromServer) {
     vm.projectList = projectListFromServer;
@@ -86,7 +86,7 @@ setInterval(function() {
 }, 3000);
 
 setInterval(function() {
-  fetch('http://192.168.0.109:3000/api/data').then(function(response) {
+  fetch('http://localhost:3000/api/data').then(function(response) {
     return response.json();
   }).then(function(clientListFromServer) {
     vm.clientList = clientListFromServer;
