@@ -59,7 +59,6 @@ func createMenu() {
 func scenario1() {
 	fmt.Fprint(os.Stdout, "User scenario 1 - Detecting Alice.\nPublishing detection to server.")
 
-	// Detecting Alice
 	alice := store.BlueData{Address: "Alice1_ID", Class: "Smartphone", Timestamp: time.Now()}
 	publishScenarioData(alice)
 
@@ -74,11 +73,36 @@ func scenario1() {
 }
 
 func scenario2() {
-	fmt.Fprint(os.Stdout, "Hey Scenario 2 was chosen!")
+	fmt.Fprint(os.Stdout, "User scenario 2 - Detecting Bob.\nPublishing detection to server.")
+
+	bob := store.BlueData{Address: "Bob2_ID", Class: "Smartphone", Timestamp: time.Now()}
+	publishScenarioData(bob)
+
+	fmt.Fprint(os.Stdout, "Halted - Continue?\n")
+	reader := bufio.NewReader(os.Stdin)
+	reader.ReadString('\n')
+
+	fmt.Fprint(os.Stdout, "Detecting Alice.\nPublishing detection to server.")
+	alice := store.BlueData{Address: "Alice2_ID", Class: "Smartphone", Timestamp: time.Now()}
+	publishScenarioData(alice)
+
 }
 
 func scenario3() {
-	fmt.Fprint(os.Stdout, "Hey Scenario 3 was chosen!")
+	fmt.Fprint(os.Stdout, "User scenario 3 - Detecting Alice and Bob.\nPublishing detection to server.")
+
+	bob := store.BlueData{Address: "Bob3_ID", Class: "Smartphone", Timestamp: time.Now()}
+	publishScenarioData(bob)
+	alice := store.BlueData{Address: "Alice3_ID", Class: "Smartphone", Timestamp: time.Now()}
+	publishScenarioData(alice)
+
+	fmt.Fprint(os.Stdout, "Halted - Continue?\n")
+	reader := bufio.NewReader(os.Stdin)
+	reader.ReadString('\n')
+
+	fmt.Fprint(os.Stdout, "Detecting Intruder.\nPublishing detection to server.")
+	trudy := store.BlueData{Address: "Alice2_ID", Class: "Motion Sensor", Timestamp: time.Now()}
+	publishScenarioData(trudy)
 }
 
 func publishScenarioData(data store.BlueData) {
